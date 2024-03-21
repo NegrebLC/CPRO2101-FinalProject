@@ -1,0 +1,6 @@
+Commands to run for initialization of project:
+    npm init -y
+    npm i express dotenv mongoose colors
+    npm i -D nodemon
+
+*If you use any other commands add them to the above list*
