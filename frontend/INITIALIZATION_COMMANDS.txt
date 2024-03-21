@@ -1,4 +1,0 @@
-Commands to run for initialization of project:
-    npx create-react-app frontend
-
-*If you use any other commands add them to the above list*
