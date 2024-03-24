@@ -4,7 +4,7 @@ const http = require("http");
 const connectDB = require("./config/db");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const userRoutes = require("./routes/user_registration/userRoutes");
+const userRoutes = require("./routes/user/userRoutes");
 
 const app = express();
 app.use(bodyParser.json());

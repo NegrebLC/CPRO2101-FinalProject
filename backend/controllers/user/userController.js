@@ -1,18 +1,42 @@
-const User = require("../../models/user_registration/User");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../../models/user/User");
+
+//JWT secret key
+const secretKey = process.env.JWT_KEY;
 
 //function that interfaces with the db to create a new user and raises errors based on defined validation
-exports.createUser = async (req, res) => 
+exports.createUser = async (req, res) =>
 {
     console.log("Create user called.");
     try
     {
-        const newUser = new User({
+        const { username, password } = req.body;
+
+        //checks if user already exists by entered username
+        const existingUser = await User.findOne({ username });
+        if (existingUser) 
+        {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        //hashing the password
+        console.log(`Hashing password...`)
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        //generating the new user with a hashed password and generated id
+        console.log(`Setting User details...`)
+        const newUser = new User(
+        {
             ...req.body,
+            password: hashedPassword,
             _id: req.body._id
-        });;
+        });
+
         console.log(`Creating User:  ${newUser}`)
         await newUser.save();
         console.log(`User Created!`)
+
         res.status(201).json(newUser); //success message to be returned in the response body back 
     }
     //catching any client (400) errors that are raised
@@ -20,6 +44,34 @@ exports.createUser = async (req, res) =>
     {
         console.error(`Error handling request: ${err}`);
         res.status(400).json({ message: err.message });
+    }
+};
+
+// Login Endpoint
+exports.userLogin = async (req, res) => {
+    try 
+    {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+        if (!user) 
+        {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword)
+        {
+            return res.status(401).json({ error: 'Invalid password' });
+        }
+        //generating JSON Web Token
+        const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+        
+        res.status(200).json({ token });
+    }
+    //catching any server (500) errors that are raised
+    catch (err)
+    {
+        console.error(err);
+        res.status(500).json({ message: err.message });
     }
 };
 
