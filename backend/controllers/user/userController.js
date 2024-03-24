@@ -43,7 +43,7 @@ exports.createUser = async (req, res) =>
     catch (err)
     {
         console.error(`Error handling request: ${err}`);
-        res.status(400).json({ message: err.message });
+        res.status(400).json({ error: err.message });
     }
 };
 
@@ -51,27 +51,32 @@ exports.createUser = async (req, res) =>
 exports.userLogin = async (req, res) => {
     try 
     {
+        console.log("Attempting login...");
         const { username, password } = req.body;
         const user = await User.findOne({ username });
         if (!user) 
         {
-            return res.status(404).json({ error: 'User not found' });
+            console.log("User not found.");
+            return res.status(404).json({ error: "User not found." });
         }
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword)
         {
-            return res.status(401).json({ error: 'Invalid password' });
+            console.log("Invalid Password.");
+            return res.status(401).json({ error: "Invalid password." });
         }
         //generating JSON Web Token
+        console.log("Generating JWT...");
         const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
         
+        console.log("Login successful!");
         res.status(200).json({ token });
     }
     //catching any server (500) errors that are raised
     catch (err)
     {
         console.error(err);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -95,7 +100,7 @@ exports.getUserById = async (req, res) =>
     catch (err)
     {
         console.error(`Error handling request: ${err}`);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -105,16 +110,16 @@ exports.getAllUsers = async (_, res) =>
     console.log("Get all users called.");
     try 
     {
-        console.log(`Getting all users...`)
+        console.log(`Getting all users...`);
         const users = await User.find();
-        console.log(`Users found: ${users}`)
+        console.log(`Users found: ${users}`);
         res.json(users); //returns all of the categories in the db
     }
     //catching any server (500) errors that are raised
     catch (err)
     {
         console.error(`Error handling request: ${err}`);
-        res.status(500).json({ message: err.message }); //if the handler encounters an error, returns it here
+        res.status(500).json({ error: err.message }); //if the handler encounters an error, returns it here
     }
 };
 
@@ -127,10 +132,10 @@ exports.deleteUser = async (req, res) =>
         if (!user)
         {
             //raising a not found (404) error is the user doesn't exist
-            console.log(`No User found with id ${req.params.userId}`)
+            console.log(`No User found with id ${req.params.userId}`);
             return res.status(404).json({ error: 'User not found!' }).send();
         }
-        console.log(`Deleting user: ${user.username}`)
+        console.log(`Deleting user: ${user.username}`);
         await User.deleteOne({ _id: req.params.userId });
         res.json({ message: 'User deleted.' }); //removes the user
     }
@@ -138,7 +143,7 @@ exports.deleteUser = async (req, res) =>
     catch (err) 
     {
         console.error("Error handling request:", err);
-        res.status(500).json({ message: err.message }); //if the handler encounters an error, returns it here
+        res.status(500).json({ error: err.message }); //if the handler encounters an error, returns it here
     }
 };
 
@@ -152,7 +157,8 @@ exports.generateUserId = async (req, res, next) =>
         const latestUser = await User.findOne().sort({ _id: -1 });
         let nextUserId = 1;
         //if there's an existing user, generates the next ID in sequence
-        if (latestUser) {
+        if (latestUser) 
+        {
             nextUserId = latestUser._id + 1;
         }
         //sets the request body's _id equal to the next in the series
@@ -164,6 +170,6 @@ exports.generateUserId = async (req, res, next) =>
     catch (err) 
     {
         console.error(`Error generating user ID: ${err}`);
-        return res.status(500).json({ message: 'Failed to generate user ID' });
+        return res.status(500).json({ error: 'Failed to generate user ID' });
     }
 };
