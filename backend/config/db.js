@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 require("colors");
 
 const connectDB = async () => {
+  console.log(`Connecting to MongoDB...`);
   try {
     const conn = await mongoose.connect(process.env.DBCONNECTION);
 
