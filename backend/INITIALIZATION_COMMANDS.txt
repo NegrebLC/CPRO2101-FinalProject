@@ -2,6 +2,11 @@ Commands to run for initialization of project:
     npm init -y
     npm i express dotenv mongoose colors
     npm i -D nodemon
+    npm i cors
 
 *If you use any other commands add them to the above list*
 *Commit changes to these files to dev branch*
+
+Create .env file (it is ignored by .gitignore):
+DBCONNECTION = mongodb+srv://coolcats:NJibwijm8n6BDy6s@cool-cat-games.ryd0b60.mongodb.net/creature-db
+We can change DBCONNECTION at some point but this should be fine for now
