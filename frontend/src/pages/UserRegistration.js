@@ -18,12 +18,14 @@ function RegistrationPage() {
         }));
     };
     
-    const passwordPattern = new RegExp(`^${formData.password}$`);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData); //tb replaced
     };
+
+    //sets value of password field to be a regex pattern, to verify with confirm password field
+    const passwordPattern = new RegExp(`^${formData.password}$`);
 
     return (
         <Container>
