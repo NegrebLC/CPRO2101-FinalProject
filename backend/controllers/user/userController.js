@@ -47,39 +47,6 @@ exports.createUser = async (req, res) =>
     }
 };
 
-// Login Endpoint
-exports.userLogin = async (req, res) => {
-    try 
-    {
-        console.log("Attempting login...");
-        const { username, password } = req.body;
-        const user = await User.findOne({ username });
-        if (!user) 
-        {
-            console.log("User not found.");
-            return res.status(404).json({ error: "User not found." });
-        }
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword)
-        {
-            console.log("Invalid Password.");
-            return res.status(401).json({ error: "Invalid password." });
-        }
-        //generating JSON Web Token
-        console.log("Generating JWT...");
-        const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-        
-        console.log("Login successful!");
-        res.status(200).json({ token });
-    }
-    //catching any server (500) errors that are raised
-    catch (err)
-    {
-        console.error(err);
-        res.status(500).json({ error: err.message });
-    }
-};
-
 //function that interfaces with the db to find a user by their Id
 exports.getUserById = async (req, res) => 
 {
@@ -173,3 +140,57 @@ exports.generateUserId = async (req, res, next) =>
         return res.status(500).json({ error: 'Failed to generate user ID' });
     }
 };
+
+//function that logs a user in and generates their JWT for an hour
+exports.userLogin = async (req, res) => {
+    try 
+    {
+        console.log("Attempting login...");
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+        if (!user) 
+        {
+            console.log("User not found.");
+            return res.status(404).json({ error: "User not found." });
+        }
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword)
+        {
+            console.log("Invalid Password.");
+            return res.status(401).json({ error: "Invalid password." });
+        }
+        //generating JSON Web Token
+        console.log("Generating JWT...");
+        const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+        
+        console.log("Login successful!");
+        res.status(200).json({ token });
+    }
+    //catching any server (500) errors that are raised
+    catch (err)
+    {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+//middleware function that checks a user's JWT before proceeding to contetn that requires verification
+function verifyToken(req, res, next) 
+{
+    const token = req.headers.authorization;
+    
+    if (!token) 
+    {
+      return res.status(401).json({ error: 'Unauthorized access.' });
+    }
+  
+    jwt.verify(token, secretKey, (err, decoded) => 
+    {
+      if (err) 
+      {
+        return res.status(401).json({ error: 'Invalid token.' });
+      }
+      req.user = decoded;
+      next();
+    });
+}
