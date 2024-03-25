@@ -178,11 +178,14 @@ exports.userLogin = async (req, res) => {
 //middleware function that checks a user's JWT before proceeding to contetn that requires verification
 exports.verifyToken = (req, res, next) =>
 {
+    console.log("Token verification called.");
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
+    console.log(`Authenticating: ${token}`);
     //if there is no token, returns this error
     if (!token) 
     {
+        console.log("Error: Token not provided.");
         return res.status(401).json({ error: "Token not provided." });
     }
     //verifying the token and passing from the middleware if it checks out
