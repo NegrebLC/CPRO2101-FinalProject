@@ -57,7 +57,7 @@ exports.getUserById = async (req, res) =>
         if (!user)
         {
             //raising a not found (404) error is the user doesn't exist
-            console.log(`No User found with id ${req.params.userId}`)
+            console.log(`Error: No User found with id ${req.params.userId}`)
             return res.status(404).json({ error: 'User not found!' }).send();
         }
         console.log(`User found: ${user}`)
@@ -99,7 +99,7 @@ exports.deleteUser = async (req, res) =>
         if (!user)
         {
             //raising a not found (404) error is the user doesn't exist
-            console.log(`No User found with id ${req.params.userId}`);
+            console.log(`Error: No User found with id ${req.params.userId}`);
             return res.status(404).json({ error: 'User not found!' }).send();
         }
         console.log(`Deleting user: ${user.username}`);
@@ -145,18 +145,19 @@ exports.generateUserId = async (req, res, next) =>
 exports.userLogin = async (req, res) => {
     try 
     {
+        console.log("User Login called.");
         console.log("Attempting login...");
         const { username, password } = req.body;
         const user = await User.findOne({ username });
         if (!user) 
         {
-            console.log("User not found.");
+            console.log("Error: User not found.");
             return res.status(404).json({ error: "User not found." });
         }
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword)
         {
-            console.log("Invalid Password.");
+            console.log("Error: Invalid Password.");
             return res.status(401).json({ error: "Invalid password." });
         }
         //generating JSON Web Token
@@ -175,22 +176,23 @@ exports.userLogin = async (req, res) => {
 };
 
 //middleware function that checks a user's JWT before proceeding to contetn that requires verification
-function verifyToken(req, res, next) 
+exports.verifyToken = (req, res, next) =>
 {
-    const token = req.headers.authorization;
-    
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    //if there is no token, returns this error
     if (!token) 
     {
-      return res.status(401).json({ error: 'Unauthorized access.' });
+        return res.status(401).json({ error: "Token not provided." });
     }
-  
-    jwt.verify(token, secretKey, (err, decoded) => 
-    {
-      if (err) 
-      {
-        return res.status(401).json({ error: 'Invalid token.' });
-      }
-      req.user = decoded;
-      next();
+    //verifying the token and passing from the middleware if it checks out
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) 
+        {
+            console.log("Error verifying token:", err.message);
+            return res.status(401).json({ error: "Invalid token." });
+        }
+        req.user = decoded;
+        next();
     });
 }

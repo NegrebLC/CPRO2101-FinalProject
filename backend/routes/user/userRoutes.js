@@ -12,5 +12,7 @@ router.get("/find/:userId", userController.getUserById);
 router.delete("/delete/:userId", userController.deleteUser);
 //logs in a user
 router.post("/login", userController.userLogin);
+//example route for accessing restricted content
+router.get("/restricted", userController.verifyToken, userController.getAllUsers);
 
 module.exports = router;
