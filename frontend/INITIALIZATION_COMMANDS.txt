@@ -3,6 +3,7 @@ Commands to run for initialization of project:
     npm i bootstrap bootswatch
     npm i react-router-dom
     npm i react-bootstrap
+    npm i axios
 
 *If you use any other commands add them to the above list*
 *Commit changes to these files to dev branch*

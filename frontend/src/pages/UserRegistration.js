@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import axios from 'axios';
 import Layout from '../components/Layout';
 
 
 const UserRegistration = () => {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
     const [error, setError] = useState(null);
     const [validated, setValidated] = useState(false);
 
@@ -13,7 +19,13 @@ const UserRegistration = () => {
         const form = event.currentTarget;
         try{
             if (form.checkValidity() && user.password === user.confirmPassword) {
-                console.log('Submitted: ', user); //http put/post requests here
+                const userData = {
+                    username: user.username,
+                    email: user.email,
+                    password: user.password
+                };
+                const response = await axios.post('http://localhost:5000/api/users/create', userData);
+                console.log('User created:', response.data);
             } 
         } catch (error) {
             setError(error.message);
