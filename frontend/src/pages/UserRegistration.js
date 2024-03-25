@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Layout from '../components/Layout';
 
@@ -13,6 +14,7 @@ const UserRegistration = () => {
     });
     const [error, setError] = useState(null);
     const [validated, setValidated] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -26,11 +28,12 @@ const UserRegistration = () => {
                 };
                 const response = await axios.post('http://localhost:5000/api/users/create', userData);
                 console.log('User created:', response.data);
+                navigate('/login');
             } 
         } catch (error) {
             setError(error.message);
         }
-        setValidated(true);
+        setValidated(true); 
     };
 
     return (
