@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import axios from 'axios';
 import Layout from '../components/Layout';
 
 function UserLogin() {
@@ -15,7 +16,11 @@ function UserLogin() {
         const form = event.currentTarget;
         try{
             if (form.checkValidity()){
-                console.log('Submitted: ', user); 
+                const userData = {
+                    username: user.username,
+                    password: user.password
+                };
+                const response = await axios.post('http://localhost:5000/api/users/login', userData);
             }
             
         } catch (error) {
