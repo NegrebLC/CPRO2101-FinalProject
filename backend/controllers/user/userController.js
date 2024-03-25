@@ -11,13 +11,19 @@ exports.createUser = async (req, res) =>
     console.log("Create user called.");
     try
     {
-        const { username, password } = req.body;
+        const { username, email, password } = req.body;
 
         //checks if user already exists by entered username
-        const existingUser = await User.findOne({ username });
-        if (existingUser) 
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) 
         {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(400).json({ message: 'Username already exists' });
+        }
+        //checks if user already exists by entered email
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) 
+        {
+            return res.status(400).json({ message: 'Email already exists' });
         }
 
         //hashing the password
