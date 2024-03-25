@@ -3,6 +3,7 @@ import About from "./pages/About";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import UserRegistration from "./pages/UserRegistration";
+import Login from "./pages/UserLogin";
 
 export default function App() {
   //setting the app routes
@@ -15,6 +16,7 @@ export default function App() {
           {/* Setting a second home path for clean routing */}
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<UserRegistration />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NoPage />} />{" "}
         </Routes>
       </BrowserRouter>
