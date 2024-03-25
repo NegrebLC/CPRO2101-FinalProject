@@ -5,7 +5,7 @@ const httpPost = require("./httpPost");
 const socket = io("http://localhost:5000", {
   query: {
     role: "user",
-    username: "testuser",
+    username: "test",
   },
 });
 
@@ -15,7 +15,7 @@ socket.on("connect", () => {
   // Start a new chat session via API
   httpPost(
     "/api/chats/start",
-    { userId: "65ffe9d023f41f89b0233261", agentId: "65ffea1e23f41f89b0233264" },
+    { userId: "1", agentId: "65ffea1e23f41f89b0233264" },
     (err, chat) => {
       if (err) {
         console.error("Error starting chat:", err);
@@ -28,7 +28,7 @@ socket.on("connect", () => {
       httpPost(
         `/api/chats/${chatId}/message`,
         {
-          senderId: "65ffe9d023f41f89b0233261",
+          senderId: "1",
           content: "Hello, I need help with my account.",
           senderType: "User",
         },

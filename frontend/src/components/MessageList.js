@@ -1,30 +1,12 @@
-import React, { useState, useEffect } from "react";
-import {
-  initiateSocketConnection,
-  disconnectSocket,
-  subscribeToChat,
-} from "../services/socketService";
+import React from "react";
 
-const MessageList = () => {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    // Subscribe to chat messages from the server
-    subscribeToChat((err, newMessage) => {
-      if (err) return;
-      // Append the new message to the current list of messages
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
-  }, []);
-
+const MessageList = ({ messages }) => {
   return (
-    <div className="message-list mb-3">
+    <ul>
       {messages.map((msg, index) => (
-        <div key={index} className="alert alert-secondary">
-          {msg}
-        </div>
+        <li key={index}>{msg.content}</li> // Adjust based on your message structure
       ))}
-    </div>
+    </ul>
   );
 };
 

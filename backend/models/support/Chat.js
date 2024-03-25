@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const chatSchema = new mongoose.Schema({
   participants: {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "User",
     },
     agent: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "Agent",
     },
   },

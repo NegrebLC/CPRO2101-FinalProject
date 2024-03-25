@@ -2,7 +2,7 @@ const io = require("socket.io-client");
 const httpPost = require("./httpPost"); // Make sure this path is correct based on your project structure
 
 // Variables to hold chat session state
-let currentChatId = "65ffef30cbd66f31266d40e7";
+let currentChatId = null;
 
 // Connect to the Socket.IO server
 const socket = io("http://localhost:5000", {
@@ -39,4 +39,4 @@ socket.on("chat message", (msg) => {
 });
 
 // Example of setting the currentChatId (in a real scenario, this might come from an API call or real-time event)
-currentChatId = "someChatId"; // This should be set dynamically based on actual chat sessions
+currentChatId = "65ffef30cbd66f31266d40e7"; // This should be set dynamically based on actual chat sessions

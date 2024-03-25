@@ -6,7 +6,7 @@ const messageSchema = new mongoose.Schema({
     ref: "Chat",
   },
   sender: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Number,
     refPath: "onModel",
   },
   onModel: {

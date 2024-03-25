@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const chatController = require("../../controllers/support/chatController");
+const messageController = require("../../controllers/support/messageController");
 
-// Start a new chat session
-router.post("/start", chatController.startChat);
+// Chat routes
+router.post("/chats/start", chatController.startChat);
+router.post("/chats/:chatId/close", chatController.closeChat);
+router.get("/chats/:chatId/messages", chatController.getChatHistory);
 
-// Add a message to a chat session
-router.post("/:chatId/message", chatController.addMessageToChat);
-
-// Close a chat session
-router.post("/:chatId/close", chatController.closeChat);
+// Message routes
+router.post("/messages/send", messageController.sendMessage);
+router.get("/messages/:chatId/history", messageController.getMessageHistory);
 
 module.exports = router;

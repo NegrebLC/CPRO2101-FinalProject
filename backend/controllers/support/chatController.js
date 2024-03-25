@@ -2,55 +2,54 @@ const Chat = require("../../models/support/Chat");
 const Message = require("../../models/support/Message");
 
 exports.startChat = async (req, res) => {
+  // Assumes req.body contains 'userId' and optionally 'agentId'
+  const { userId, agentId } = req.body;
+
   try {
-    const chat = new Chat({
+    const newChat = new Chat({
       participants: {
-        user: req.body.userId,
-        agent: req.body.agentId,
+        user: userId,
+        agent: agentId || null, // Can be null initially if not assigned
       },
       messages: [],
       status: "active",
     });
-    await chat.save();
-    res.status(201).send(chat);
+
+    await newChat.save();
+    res.status(201).json(newChat);
   } catch (error) {
-    res.status(400).send(error);
-  }
-};
-
-exports.addMessageToChat = async (req, res) => {
-  try {
-    const message = new Message({
-      chat: req.params.chatId,
-      sender: req.body.senderId,
-      onModel: req.body.senderType,
-      content: req.body.content,
-    });
-    await message.save();
-
-    // Add message to chat
-    const chat = await Chat.findById(req.params.chatId);
-    chat.messages.push(message._id);
-    await chat.save();
-
-    res.status(201).send(message);
-  } catch (error) {
-    res.status(400).send(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
 exports.closeChat = async (req, res) => {
+  const { chatId } = req.params;
+
   try {
     const chat = await Chat.findByIdAndUpdate(
-      req.params.chatId,
+      chatId,
       { status: "closed" },
       { new: true }
     );
     if (!chat) {
-      return res.status(404).send();
+      return res.status(404).json({ error: "Chat not found" });
     }
-    res.send(chat);
+    res.json(chat);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getChatHistory = async (req, res) => {
+  const { chatId } = req.params;
+
+  try {
+    const chat = await Chat.findById(chatId).populate("messages");
+    if (!chat) {
+      return res.status(404).json({ error: "Chat not found" });
+    }
+    res.json(chat.messages);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

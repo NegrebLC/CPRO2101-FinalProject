@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
 
-// Temp model with the purpose of testing User Support ***********
 const userSchema = new mongoose.Schema({
+  _id: Number,
   username: {
     type: String,
     required: true,
     unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
   },
 });
 

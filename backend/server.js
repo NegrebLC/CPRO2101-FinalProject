@@ -5,10 +5,9 @@ const socketIo = require("socket.io");
 const connectDB = require("./config/db");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const userRoutes = require("./routes/support/userRoutes");
+const userRoutes = require("./routes/user/userRoutes");
 const agentRoutes = require("./routes/support/agentRoutes");
 const chatRoutes = require("./routes/support/chatRoutes");
-const messageRoutes = require("./routes/support/messageRoutes");
 
 const app = express();
 app.use(bodyParser.json());
@@ -46,8 +45,7 @@ io.on("connection", (socket) => {
 // Define routes
 app.use("/api/users", userRoutes);
 app.use("/api/agents", agentRoutes);
-app.use("/api/chats", chatRoutes);
-app.use("/api/messages", messageRoutes);
+app.use("/api/support/", chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 
