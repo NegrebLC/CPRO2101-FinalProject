@@ -3,6 +3,7 @@ Commands to run for initialization of project:
     npm i express dotenv mongoose colors
     npm i -D nodemon
     npm i cors
+    npm i bcryptjs jsonwebtoken
 
 *If you use any other commands add them to the above list*
 *Commit changes to these files to dev branch*
