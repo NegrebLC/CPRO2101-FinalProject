@@ -1,42 +1,61 @@
 import React, { useState } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
-import FormInput from '../components/FormInput';
+import { Form, Button, Alert } from 'react-bootstrap';
+import Layout from '../components/Layout';
 
 function UserLogin() {
-    const [formData, setFormData] = useState({
+    const [user, setUser] = useState({
         username: '',
         password: ''
     });
+    const [error, setError] = useState(null);
+    const [validated, setValidated] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Username:', formData.username);
-        console.log('Password:', formData.password);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        try{
+            if (form.checkValidity()){
+                console.log('Submitted: ', contact); 
+            }
+            
+        } catch (error) {
+            setError(error.message);
+        }
+        setValidated(true);
     };
 
     return (
-        <Container>
-            <h2>Login</h2>
-            <Form onSubmit={handleSubmit}>
-                <FormInput type="text" label="Username" name="username"
-                    value={formData.username} onChange={handleChange}
-                />
-                <FormInput type="password" label="Password" name="password"
-                    value={formData.password} onChange={handleChange}
-                />
-                <Button variant="primary" type="submit">
+        <Layout title='Login'>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+
+                <Form.Group className="mb-3" controlId="formUserame">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type='text'
+                        required value={user.username || ''} 
+                        onChange={(e) => setUser({...user, username: e.target.value})}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Please provide your username.
+                    </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type='password' placeholder='Doe' 
+                        required value={user.password || ''} 
+                        onChange={(e) => setUser({...user, password: e.target.value})}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Please provide your password.
+                    </Form.Control.Feedback>
+                </Form.Group>
+
+                <Button variant='primary' type='submit'>
                     Login
                 </Button>
             </Form>
-        </Container>
+        </Layout>
     );
 }
 
