@@ -138,7 +138,7 @@ exports.agentLogin = async (req, res) => {
     });
 
     console.log("Login successful!");
-    res.status(200).json({ token });
+    res.status(200).json({ id: agent._id, token, username: agent.agentname });
   } catch (err) {
     //catching any server (500) errors that are raised
     console.error(err);

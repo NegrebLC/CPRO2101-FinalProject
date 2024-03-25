@@ -2,12 +2,12 @@ const Message = require("../../models/support/Message");
 const Chat = require("../../models/support/Chat");
 
 exports.sendMessage = async (req, res) => {
-  const { chatId, senderId, content, onModel } = req.body;
+  const { chatId, sender, content, onModel } = req.body;
 
   try {
     const newMessage = new Message({
       chat: chatId,
-      sender: senderId,
+      sender: sender,
       onModel: onModel,
       content: content,
     });

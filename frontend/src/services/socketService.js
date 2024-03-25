@@ -1,26 +1,46 @@
 import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
-let socket;
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || "http://localhost:5000"; // Replace with your actual WebSocket URL
 
-export const initiateSocketConnection = () => {
-  socket = io(ENDPOINT);
-  console.log(`Connecting socket...`);
-};
+class SocketService {
+  constructor() {
+    this.socket = null;
+  }
 
-export const disconnectSocket = () => {
-  console.log("Disconnecting socket...");
-  if (socket) socket.disconnect();
-};
+  connect(token) {
+    this.socket = io(SOCKET_URL, {
+      query: { token },
+    });
 
-export const subscribeToChat = (cb) => {
-  if (!socket) return true;
-  socket.on("chat message", (msg) => {
-    console.log("Websocket event received!");
-    return cb(null, msg);
-  });
-};
+    this.socket.on("connect", () => console.log("Socket connected"));
+    this.socket.on("disconnect", () => console.log("Socket disconnected"));
+  }
 
-export const sendMessage = (message) => {
-  if (socket) socket.emit("chat message", message);
-};
+  disconnect() {
+    if (this.socket) {
+      this.socket.disconnect();
+    }
+  }
+
+  on(event, func) {
+    if (this.socket) {
+      this.socket.on(event, func);
+    }
+  }
+
+  emit(event, data) {
+    if (this.socket) {
+      this.socket.emit(event, data);
+    }
+  }
+
+  off(event, func) {
+    if (this.socket) {
+      this.socket.off(event, func);
+    }
+  }
+}
+
+const socketService = new SocketService();
+
+export default socketService;

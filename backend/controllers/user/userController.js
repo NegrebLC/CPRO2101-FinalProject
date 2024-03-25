@@ -138,7 +138,7 @@ exports.userLogin = async (req, res) => {
     });
 
     console.log("Login successful!");
-    res.status(200).json({ token });
+    res.status(200).json({ id: user._id, token, username: user.username });
   } catch (err) {
     //catching any server (500) errors that are raised
     console.error(err);

@@ -23,7 +23,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*", // Adjust this to match frontend's URL for security
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
 // Define routes
 app.use("/api/users", userRoutes);
 app.use("/api/agents", agentRoutes);
-app.use("/api/support/", chatRoutes);
+app.use("/api/support", chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 

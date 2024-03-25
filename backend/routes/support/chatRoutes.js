@@ -7,6 +7,8 @@ const messageController = require("../../controllers/support/messageController")
 router.post("/chats/start", chatController.startChat);
 router.post("/chats/:chatId/close", chatController.closeChat);
 router.get("/chats/:chatId/messages", chatController.getChatHistory);
+router.get("/chats/user/:username", chatController.getChatsByUsername);
+router.get("/chats/active", chatController.getActiveChats);
 
 // Message routes
 router.post("/messages/send", messageController.sendMessage);
