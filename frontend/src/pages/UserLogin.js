@@ -15,7 +15,7 @@ function UserLogin() {
         const form = event.currentTarget;
         try{
             if (form.checkValidity()){
-                console.log('Submitted: ', contact); 
+                console.log('Submitted: ', user); 
             }
             
         } catch (error) {
@@ -42,7 +42,7 @@ function UserLogin() {
 
                 <Form.Group className="mb-3" controlId="formPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type='password' placeholder='Doe' 
+                    <Form.Control type='password'
                         required value={user.password || ''} 
                         onChange={(e) => setUser({...user, password: e.target.value})}
                     />
