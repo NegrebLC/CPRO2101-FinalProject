@@ -1,4 +1,5 @@
 import React from "react";
+import "./MessageList.css"; // Make sure this import points to your CSS file
 
 const MessageList = ({ messages, currentUserId }) => {
   return (
@@ -15,8 +16,8 @@ const MessageList = ({ messages, currentUserId }) => {
               }`}
             >
               <span
-                className={`badge ${
-                  message.sender === currentUserId ? "bg-info" : "bg-warning"
+                className={`badge message-text ${
+                  message.sender === currentUserId ? "bg-primary" : "bg-warning"
                 } text-dark`}
               >
                 {message.content}
