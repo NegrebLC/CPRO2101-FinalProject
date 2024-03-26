@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
-import UserSupport from "./pages/ChatPage";
-import LoginPage from "./pages/LoginPage";
-import AgentLoginPage from "./pages/AgentLoginPage";
+import UserSupport from "./pages/support/ChatPage";
+import LoginPage from "./pages/TempLoginPage";
+import AgentLoginPage from "./pages/support/AgentLoginPage";
 
 export default function App() {
   return (

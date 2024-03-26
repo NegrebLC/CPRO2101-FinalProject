@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../components/Layout";
-import ChatList from "../components/ChatList";
-import MessageList from "../components/MessageList";
-import MessageInput from "../components/MessageInput";
-import supportApi from "../services/supportApi";
-import { useAuth } from "../context/AuthContext";
+import Layout from "../../components/Layout";
+import ChatList from "../../components/support/ChatList";
+import MessageList from "../../components/support/MessageList";
+import MessageInput from "../../components/support/MessageInput";
+import supportApi from "../../services/supportApi";
+import { useAuth } from "../../context/AuthContext";
 
 const ChatPage = () => {
   const [currentChatId, setCurrentChatId] = useState(null);
