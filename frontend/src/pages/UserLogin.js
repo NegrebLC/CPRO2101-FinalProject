@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import Layout from "../components/Layout";
 
@@ -9,7 +11,9 @@ function UserLogin() {
     password: "",
   });
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
+  const { login } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,6 +24,8 @@ function UserLogin() {
           username: user.username,
           password: user.password,
         };
+        await login({ ...user, role: "user" });
+        navigate("/home");
         const response = await axios.post(
           "http://localhost:5000/api/users/login",
           userData

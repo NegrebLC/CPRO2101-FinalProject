@@ -20,7 +20,7 @@ const AgentLoginPage = () => {
     try {
       // Call agentLogin function with credentials
       await login({ ...credentials, role: "agent" });
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       console.log(error);
       setError("Login failed. Please check your credentials and try again.");
