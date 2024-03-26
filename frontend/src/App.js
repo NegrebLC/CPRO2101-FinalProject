@@ -4,7 +4,6 @@ import About from "./pages/About";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import UserSupport from "./pages/support/ChatPage";
-import LoginPage from "./pages/TempLoginPage";
 import AgentLoginPage from "./pages/support/AgentLoginPage";
 import UserRegistration from "./pages/UserRegistration";
 import Login from "./pages/UserLogin";
@@ -14,12 +13,11 @@ export default function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Home />} />
+          <Route index element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/support" element={<UserSupport />} />
           <Route path="/agents/login" element={<AgentLoginPage />} />
-          <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NoPage />} />

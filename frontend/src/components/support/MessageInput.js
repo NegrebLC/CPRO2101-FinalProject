@@ -1,18 +1,24 @@
 import React, { useState, useRef } from "react";
 
-const MessageInput = ({ onSendMessage }) => {
+const MessageInput = ({ onSendMessage, chatStatus }) => {
   const [message, setMessage] = useState("");
   const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Check if the chat is closed before sending the message
+    if (chatStatus === "closed") {
+      alert("This chat is closed! Please open a new chat if you need help.");
+      return; // Prevent sending the message
+    }
+
     const trimmedMessage = message.trim();
     if (!trimmedMessage) return;
 
     onSendMessage(trimmedMessage);
     setMessage("");
 
-    // Return focus to the input field for better user experience
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -35,7 +41,7 @@ const MessageInput = ({ onSendMessage }) => {
           type="submit"
           aria-label="Send message"
         >
-          {" "}
+          Send
         </button>
       </div>
     </form>

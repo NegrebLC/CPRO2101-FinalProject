@@ -2,8 +2,8 @@ const Chat = require("../../models/support/Chat");
 const Message = require("../../models/support/Message");
 const User = require("../../models/user/User");
 
+// Starts a chat between an agent and a user
 exports.startChat = async (req, res) => {
-  // Assumes req.body contains 'userId' and optionally 'agentId'
   const { userId, agentId } = req.body;
   console.log("Trying to start chat...");
 
@@ -26,6 +26,7 @@ exports.startChat = async (req, res) => {
   }
 };
 
+// Closes a chat
 exports.closeChat = async (req, res) => {
   const { chatId } = req.params;
 
@@ -44,6 +45,7 @@ exports.closeChat = async (req, res) => {
   }
 };
 
+// Gets all messages from a specified chat
 exports.getChatHistory = async (req, res) => {
   const { chatId } = req.params;
 
@@ -58,18 +60,17 @@ exports.getChatHistory = async (req, res) => {
   }
 };
 
+// Gets all of the chats a user is apart of
 exports.getChatsByUsername = async (req, res) => {
   const { username } = req.params;
 
   try {
-    // Step 1: Find the user's ID by their username
     const user = await User.findOne({ username: username }, "_id");
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
     const userId = user._id;
 
-    // Step 2: Find all chats associated with the found user ID
     const chats = await Chat.find({ "participants.user": userId });
 
     res.status(200).json(chats);
@@ -79,6 +80,7 @@ exports.getChatsByUsername = async (req, res) => {
   }
 };
 
+// Gets all active chats
 exports.getActiveChats = async (req, res) => {
   try {
     const activeChats = await Chat.find({ status: "active" });

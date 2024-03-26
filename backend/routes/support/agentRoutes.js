@@ -10,7 +10,7 @@ router.post(
 );
 //gets a list of all agents
 router.get("/find/all", agentController.getAllAgents);
-//gets a agent by Id
+//gets an agent by Id
 router.get("/find/:agentId", agentController.getAgentById);
 //deletes a agent
 router.delete("/delete/:agentId", agentController.deleteAgent);

@@ -5,7 +5,7 @@ const Agent = require("../../models/support/Agent");
 //JWT secret key
 const secretKey = process.env.JWT_KEY;
 
-// Function that interfaces with the db to create a new agent and raises errors based on defined validation
+// Creates a new agent
 exports.createAgent = async (req, res) => {
   console.log("Create agent called.");
   try {

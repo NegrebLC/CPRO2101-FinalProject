@@ -1,6 +1,7 @@
 const Message = require("../../models/support/Message");
 const Chat = require("../../models/support/Chat");
 
+// Sends a message
 exports.sendMessage = async (req, res) => {
   const { chatId, sender, content, onModel } = req.body;
 
@@ -26,6 +27,7 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
+// Gets all messages from a certain chat
 exports.getMessageHistory = async (req, res) => {
   const { chatId } = req.params;
 

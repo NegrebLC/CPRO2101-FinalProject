@@ -1,5 +1,5 @@
 import React from "react";
-import "./MessageList.css"; // Make sure this import points to your CSS file
+import "./MessageList.css";
 
 const MessageList = ({ messages, currentUserId }) => {
   return (
@@ -9,19 +9,19 @@ const MessageList = ({ messages, currentUserId }) => {
           {messages.map((message) => (
             <li
               key={message.id}
-              className={`message d-flex ${
+              className={`d-flex ${
                 message.sender === currentUserId
                   ? "justify-content-end"
                   : "justify-content-start"
               }`}
             >
-              <span
-                className={`badge message-text ${
+              <div
+                className={`message-text ${
                   message.sender === currentUserId ? "bg-primary" : "bg-warning"
-                } text-dark`}
+                } text-black`}
               >
                 {message.content}
-              </span>
+              </div>
             </li>
           ))}
         </ul>

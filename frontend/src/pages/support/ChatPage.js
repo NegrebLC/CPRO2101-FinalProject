@@ -7,16 +7,24 @@ import supportApi from "../../services/supportApi";
 import { useAuth } from "../../context/AuthContext";
 
 const ChatPage = () => {
-  const [currentChatId, setCurrentChatId] = useState(null);
+  const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [chats, setChats] = useState([]);
   const { currentUser } = useAuth();
 
-  // Function to fetch chats based on the current user's role
+  useEffect(() => {
+    fetchChats();
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!currentChat || !currentChat._id) return;
+    fetchMessages(currentChat);
+  }, [currentChat]);
+
+  // Gets list of all chats for the user
   const fetchChats = async () => {
     try {
       let response;
-      console.log(currentUser);
       if (currentUser.role === "user") {
         response = await supportApi.getChatsByUsername(currentUser.username);
       } else if (currentUser.role === "agent") {
@@ -28,50 +36,38 @@ const ChatPage = () => {
     }
   };
 
-  // Fetch the list of chats when the component mounts or the current user changes
-  useEffect(() => {
-    fetchChats();
-  }, [currentUser]);
-
-  // Fetch messages for the current chat
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (!currentChatId) return;
-      try {
-        const response = await supportApi.getChatMessages(currentChatId);
-        setMessages(response.data);
-      } catch (error) {
-        console.error("Failed to fetch messages:", error);
-      }
-    };
-
-    fetchMessages();
-  }, [currentChatId]);
-
-  // Handles chat selection, updating the current chat ID
-  const handleChatSelection = (chatId) => {
-    setCurrentChatId(chatId);
+  // Gets all messages in a chat
+  const fetchMessages = async (chat) => {
+    try {
+      const response = await supportApi.getChatMessages(chat._id);
+      setMessages(response.data);
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    }
   };
 
-  const handleSendMessage = async (messageContent) => {
-    try {
-      const senderId = currentUser.id;
-      // Capitalize the first letter of currentUser.role
-      const senderRole =
-        currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+  // Selects a chat
+  const handleChatSelection = (chatId) => {
+    const selectedChat = chats.find((chat) => chat._id === chatId);
+    setCurrentChat(selectedChat);
+  };
 
+  // Sends a message
+  const handleSendMessage = async (messageContent) => {
+    if (!currentChat || currentChat.status === "closed") {
+      alert("This chat is closed. Please open a new chat if you need help.");
+      return;
+    }
+    try {
       const payload = {
-        chatId: currentChatId,
-        sender: senderId,
-        onModel: senderRole,
+        chatId: currentChat._id,
+        sender: currentUser.id,
+        onModel:
+          currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1),
         content: messageContent,
       };
-      console.log("Sending message with payload:", payload);
-
       await supportApi.sendMessage(payload);
-
-      const response = await supportApi.getChatMessages(currentChatId);
-      setMessages(response.data);
+      fetchMessages(currentChat);
     } catch (error) {
       console.error("Failed to send message:", error);
     }
@@ -102,15 +98,32 @@ const ChatPage = () => {
     }
   };
 
+  // Closes a chat
+  const handleCloseChat = async () => {
+    if (!currentChat) return;
+    try {
+      await supportApi.closeChat(currentChat._id);
+      alert("Chat has been closed.");
+      fetchChats();
+    } catch (error) {
+      console.error("Failed to close chat:", error);
+    }
+  };
+
   return (
     <Layout>
       <div className="chat-page container-fluid">
         {currentUser.role === "user" && (
           <div className="row mb-3">
-            <div className="col-md-12">
+            <div className="col-md-12 d-flex justify-content-between">
               <button className="btn btn-primary" onClick={handleStartChat}>
                 Start Chat with Agent
               </button>
+              {currentChat && (
+                <button className="btn btn-danger" onClick={handleCloseChat}>
+                  Close Chat
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -118,10 +131,23 @@ const ChatPage = () => {
           <div className="col-md-4">
             <ChatList chats={chats} onSelectChat={handleChatSelection} />
           </div>
-          <div className="col-md-8">
-            <MessageList messages={messages} currentUserId={currentUser.id} />
-            <MessageInput onSendMessage={handleSendMessage} />
-          </div>
+          {currentChat && (
+            <div
+              className="col-md-8"
+              style={{
+                border: "1px solid #696969",
+                borderRadius: "5px",
+                padding: "10px",
+                margin: "10px 0",
+              }}
+            >
+              <MessageList messages={messages} currentUserId={currentUser.id} />
+              <MessageInput
+                onSendMessage={handleSendMessage}
+                chatStatus={currentChat ? currentChat.status : "open"}
+              />
+            </div>
+          )}
         </div>
       </div>
     </Layout>
