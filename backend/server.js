@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const userRoutes = require("./routes/user/userRoutes");
 const agentRoutes = require("./routes/support/agentRoutes");
 const chatRoutes = require("./routes/support/chatRoutes");
+const creatureRoutes = require("./routes/support/creatureRoutes");
 
 const app = express();
 app.use(bodyParser.json());
@@ -46,6 +47,7 @@ io.on("connection", (socket) => {
 app.use("/api/users", userRoutes);
 app.use("/api/agents", agentRoutes);
 app.use("/api/support", chatRoutes);
+app.use("/creatures", creatureRoutes);
 
 const PORT = process.env.PORT || 5000;
 
