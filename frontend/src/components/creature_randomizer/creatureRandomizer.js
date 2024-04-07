@@ -5,6 +5,11 @@ const MAX_HEAD_ID = 3;
 const MAX_BODY_ID = 3;
 const MAX_ARMS_ID = 3;
 const MAX_LEGS_ID = 3;
+const NAMES = ["Jerk", "Buddy", "Sweetheart", "Pal", "Friend", "Baby", "Silly Billy", "pwease"]
+
+function generateName(MAX) {
+    return Math.floor(Math.random() * MAX);
+}
 
 function generateId(MAX) {
     return Math.floor(Math.random() * MAX) + 1;
@@ -24,6 +29,7 @@ export default function CreatureRandomizer() {
     const BODY_ID = generateId(MAX_BODY_ID);
     const ARMS_ID = generateId(MAX_ARMS_ID);
     const LEGS_ID = generateId(MAX_LEGS_ID);
+    const name = NAMES[generateName(NAMES.length)];
 
     return (
         <div className="container mb-2">
@@ -45,7 +51,7 @@ export default function CreatureRandomizer() {
             </div>
             <div className="d-flex align-items-center justify-content-center">
                 <button className="btn btn-success">
-                    Adopt!
+                    Adopt me {name}!
                 </button>
             </div>
         </div>
