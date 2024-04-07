@@ -31,6 +31,18 @@ export default function NavBar() {
               </Link>
             </li>
           </ul>
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link className="nav-link text-dark" to="/login">
+                Login
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-dark" to="/register">
+                Register
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
