@@ -6,7 +6,7 @@ export default function NavBar() {
   return (
     <nav className="navbar navbar-expand-lg bg-secondary" data-bs-theme="dark">
       <div className="container-fluid">
-        <a className="navbar-brand">CreatureCreator.com</a>
+        <a className="navbar-brand">Fugglets!</a>
         <button
           className="navbar-toggler"
           type="button"
