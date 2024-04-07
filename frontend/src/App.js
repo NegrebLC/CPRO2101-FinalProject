@@ -1,23 +1,26 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"; //importing the react router dom to set my routes
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
+import UserSupport from "./pages/support/ChatPage";
+import AgentLoginPage from "./pages/support/AgentLoginPage";
 import UserRegistration from "./pages/UserRegistration";
 import Login from "./pages/UserLogin";
 
 export default function App() {
-  //setting the app routes
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Home />} />
-          <Route path="/home" element={<Home />} />{" "}
-          {/* Setting a second home path for clean routing */}
+          <Route index element={<Login />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/support" element={<UserSupport />} />
+          <Route path="/agents/login" element={<AgentLoginPage />} />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<NoPage />} />{" "}
+          <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
     </div>

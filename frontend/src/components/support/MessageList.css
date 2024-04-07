@@ -1,0 +1,25 @@
+.message-text {
+  font-size: 1.15rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid black;
+  display: block;
+  max-width: 80%;
+  overflow-wrap: break-word;
+  margin-bottom: 3px;
+}
+
+.message-list {
+  max-height: calc(100vh - 350px);
+  overflow-y: auto;
+}
+
+.bg-primary {
+  background-color: teal !important;
+  color: white;
+}
+
+.bg-warning {
+  background-color: orange !important;
+  color: black;
+}
