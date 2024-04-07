@@ -7,7 +7,7 @@ const creatureSchema = new mongoose.Schema(
       required: true,
     },
     UserId: {
-      type: String,
+      type: Number,
       required: true,
     },
     HeadId: {
