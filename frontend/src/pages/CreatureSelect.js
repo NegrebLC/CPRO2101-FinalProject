@@ -1,14 +1,5 @@
-import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
 import Layout from "../components/Layout";
 import CreatureRandomizer from "../components/creature_randomizer/creatureRandomizer";
-
-function generateCreatures(items)
-{
-  for (let i = 0; i < items; i++)
-  {
-
-  }
-}
 
 export default function CreatureSelect() {
   const numberOfCreatures = 6;
