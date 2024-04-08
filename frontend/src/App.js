@@ -19,7 +19,10 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<UserRegistration />} />
-          <Route path="/support" element={<PrivateRoute element={<UserSupport />} roles={["user", "agent"]} />} />
+          <Route
+            path="/support"
+            element={<PrivateRoute element={UserSupport} roles={["user", "agent"]} />}
+          />
           <Route path="/agents/login" element={<AgentLoginPage />} />
           <Route path="*" element={<NoPage />} />
         </Routes>

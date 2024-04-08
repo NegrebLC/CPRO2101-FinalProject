@@ -2,17 +2,38 @@ import React from "react";
 import { useAuth } from "./AuthContext";
 import { Navigate, Route } from "react-router-dom";
 
-// Define a PrivateRoute component
-const PrivateRoute = ({ element: Element, roles, ...rest }) => {
+const PrivateRoute = ({ element: Element, roles, redirectPath = "/login", ...rest }) => {
   const { currentUser } = useAuth();
 
   // Check if user is logged in and has the required role
   if (!currentUser || !roles.includes(currentUser.role)) {
-    return <Navigate to="/login" />; // Redirect to login page if user is not logged in or doesn't have the required role
+    //redirect to login page or supplied path on auth failure
+    return <Navigate to={redirectPath} />; 
   }
 
-  // Render the component if user is logged in and has the required role
-  return <Route {...rest} element={<Element />} />;
+  //render component if user passes auth
+  return <Element {...rest}/>;
 };
 
 export default PrivateRoute;
+
+//HOW TO USE:
+//<BrowserRouter>
+//  <Routes>
+//    
+//    OLD
+//    <Route path="/support" element={<UserSupport />} />
+
+//    NEW
+//    <Route
+//      path="/support"                  //orginal Path
+//      element={
+//          <PrivateRoute                //Setting Private Route Component
+//          element={UserSupport}        //Page/Component you want to restrict goes in element={} without its < />
+//      roles={["user", "agent"]} />}    //Roles allowed access as List
+//      redirectPath ="/about"           //Path to be redirected to (OPTIONAL) default is "/login"
+//    />
+//        
+//  </Routes>
+//</BrowserRouter>
+
