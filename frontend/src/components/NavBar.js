@@ -27,7 +27,7 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
             </li>
             <li className="nav-item">
               <Link className="nav-link text-dark" to="/creature-select">
-                Creature Select
+                My Fugglet
               </Link>
             </li>
             <li className="nav-item">
