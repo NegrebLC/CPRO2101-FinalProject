@@ -39,38 +39,40 @@ function UserLogin() {
 
   return (
     <Layout title="Login">
-      {error && <Alert variant="danger">{error}</Alert>}
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formUserame">
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            type="text"
-            required
-            value={user.username || ""}
-            onChange={(e) => setUser({ ...user, username: e.target.value })}
-          />
-          <Form.Control.Feedback type="invalid">
-            Please provide your username.
-          </Form.Control.Feedback>
-        </Form.Group>
+      <h2 className="display-3 mb-4 text-center">Login</h2>
+      <div className="d-flex flex-column justify-content-center align-items-center">
+        {error && <Alert variant="danger">{error}</Alert>}
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formUserame">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              required
+              value={user.username || ""}
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
+            />
+            <Form.Control.Feedback type="invalid">
+              Please provide your username.
+            </Form.Control.Feedback>
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            required
-            value={user.password || ""}
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
-          />
-          <Form.Control.Feedback type="invalid">
-            Please provide your password.
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Login
-        </Button>
-      </Form>
+          <Form.Group className="mb-3" controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              required
+              value={user.password || ""}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+            />
+            <Form.Control.Feedback type="invalid">
+              Please provide your password.
+            </Form.Control.Feedback>
+          </Form.Group>
+            <Button variant="primary" type="submit">
+              Login
+            </Button>
+        </Form>
+      </div>
     </Layout>
   );
 }
