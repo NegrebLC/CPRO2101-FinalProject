@@ -37,7 +37,7 @@ const CreatureInteract = () => {
         const creatures = await getAllCreatures();
         const userCreature = creatures.find((c) => c.UserId === currentUser.id);
         if (!userCreature) {
-          navigate("/home");
+          navigate("/creature-select");
           return;
         }
         setCreature(userCreature);
@@ -121,7 +121,7 @@ const CreatureInteract = () => {
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
             >
-              Drop Food Here
+              Drop your Fugglet some food!
             </div>
           </div>
 
@@ -181,7 +181,7 @@ const CreatureInteract = () => {
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
             >
-              Drop Play Items Here
+              Drop your Fugglet some toys!
             </div>
           </div>
         </div>

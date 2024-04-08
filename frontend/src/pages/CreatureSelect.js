@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getAllCreatures } from '../services/creatureApi';
+import { getAllCreatures } from "../services/creatureApi";
 import CreatureRandomizer from "../components/creature_randomizer/creatureRandomizer";
 
 const CreatureSelect = () => {
@@ -16,17 +16,12 @@ const CreatureSelect = () => {
   //function that fetches all creatures form the database
   useEffect(() => {
     const fetchCreatures = async () => {
-      try 
-      {
+      try {
         const cre = await getAllCreatures();
         setExistingCreatures(cre);
-      } 
-      catch (error) 
-      {
-        console.error('Error fetching creatures:', error);
-      } 
-      finally 
-      {
+      } catch (error) {
+        console.error("Error fetching creatures:", error);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -36,13 +31,16 @@ const CreatureSelect = () => {
 
   //renders the page or reroutes the user if they already have a creature
   useEffect(() => {
-    if (!isLoading && existingCreatures.some(creature => creature.UserId === currentUser.id)) {
-      navigate("/home");
+    if (
+      !isLoading &&
+      existingCreatures.some((creature) => creature.UserId === currentUser.id)
+    ) {
+      navigate("/my-creature");
     }
   }, [isLoading, existingCreatures, currentUser.id, navigate]);
 
   const handleRefresh = () => {
-    setRefreshKey(prevKey => prevKey + 1);
+    setRefreshKey((prevKey) => prevKey + 1);
   };
 
   const creatures = Array.from({ length: NUM_OF_CREATURES }, (_, index) => (
@@ -51,17 +49,13 @@ const CreatureSelect = () => {
     </div>
   ));
 
-  if (isLoading) 
-  {
+  if (isLoading) {
     return (
       <Layout>
-        <div className="text-center mt-4">
-          Loading...
-        </div>
-      </Layout>);
-  }
-  else
-  {
+        <div className="text-center mt-4">Loading...</div>
+      </Layout>
+    );
+  } else {
     return (
       <Layout>
         <h2 className="display-4 mb-4 text-center">Select Your Fugglet!</h2>
@@ -73,13 +67,15 @@ const CreatureSelect = () => {
 
           <div className="d-flex justify-content-center">
             <div className="refresh-button-container">
-              <button className="btn btn-primary" onClick={handleRefresh}>Refresh</button>
+              <button className="btn btn-primary" onClick={handleRefresh}>
+                Refresh
+              </button>
             </div>
           </div>
         </div>
       </Layout>
     );
   }
-}
+};
 
 export default CreatureSelect;

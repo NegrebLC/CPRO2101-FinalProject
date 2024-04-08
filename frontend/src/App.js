@@ -46,9 +46,6 @@ export default function App() {
             }
           />
           <Route path="/agents/login" element={<AgentLoginPage />} />
-          <Route path="/register" element={<UserRegistration />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/creature-select" element={<CreatureSelect />} />
           <Route path="/my-creature" element={<CreatureInteract />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
