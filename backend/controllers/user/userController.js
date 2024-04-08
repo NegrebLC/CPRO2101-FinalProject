@@ -31,8 +31,7 @@ exports.createUser = async (req, res) => {
     const newUser = new User({
       ...req.body,
       password: hashedPassword,
-      _id: req.body._id,
-      role: "user"
+      _id: req.body._id
     });
 
     console.log(`Creating User:  ${newUser}`);
