@@ -25,10 +25,10 @@ function importAll(r) {
 
 const images = importAll(require.context('./images', false, /\.png$/));
 
-export default function CreatureRandomizer() {
+export default function CreatureRandomizer({ userId }) {
 
     const [creatureAttributes, setCreatureAttributes] = useState({
-        UserId: 1,
+        UserId: userId,
         HeadId: generateId(MAX_HEAD_ID),
         BodyId: generateId(MAX_BODY_ID),
         ArmId: generateId(MAX_ARMS_ID),
