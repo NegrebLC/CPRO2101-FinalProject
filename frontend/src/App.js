@@ -8,8 +8,9 @@ import UserSupport from "./pages/support/ChatPage";
 import AgentLoginPage from "./pages/support/AgentLoginPage";
 import UserRegistration from "./pages/UserRegistration";
 import Login from "./pages/UserLogin";
-import CreatureSelect from "./pages/CreatureSelect"
-import Logout from "./pages/Logout"
+import CreatureSelect from "./pages/CreatureSelect";
+import CreatureInteract from "./pages/CreatureInteract";
+import Logout from "./pages/Logout";
 import PrivateRoute from "./context/PrivateRoute";
 
 export default function App() {
@@ -22,16 +23,33 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route
-            path="/creature-select" 
-            element={<PrivateRoute element={CreatureSelect} roles={["user"]} redirectPath="/no-access"/>} />
+            path="/creature-select"
+            element={
+              <PrivateRoute
+                element={CreatureSelect}
+                roles={["user"]}
+                redirectPath="/no-access"
+              />
+            }
+          />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/no-access" element={<NoAccess />} />
           <Route path="/logout" element={<Logout />} />
           <Route
             path="/support"
-            element={<PrivateRoute element={UserSupport} roles={["user", "agent"]} redirectPath="/no-access"/>}
+            element={
+              <PrivateRoute
+                element={UserSupport}
+                roles={["user", "agent"]}
+                redirectPath="/no-access"
+              />
+            }
           />
           <Route path="/agents/login" element={<AgentLoginPage />} />
+          <Route path="/register" element={<UserRegistration />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/creature-select" element={<CreatureSelect />} />
+          <Route path="/my-creature" element={<CreatureInteract />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>

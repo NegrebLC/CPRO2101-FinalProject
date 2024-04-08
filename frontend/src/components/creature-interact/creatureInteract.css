@@ -1,0 +1,23 @@
+.creature {
+  position: relative;
+  width: 12rem;
+  height: 12rem;
+}
+
+.head,
+.body,
+.arms,
+.legs {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  justify-content: center;
+  align-items: center;
+}
+.emoji {
+  cursor: pointer;
+}
