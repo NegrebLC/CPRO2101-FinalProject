@@ -21,7 +21,7 @@ export default function Logout() {
   return (
     <Layout>
       <div className="container-fluid h-100 text-center align-items-center justify-content-center">
-        <h2>Logout</h2>
+        <h2 className="display-3 mb-4 text-center">Logout</h2>
         <p>Are you sure you want to logout?</p>
         <div className="container col-md-2 mb-2">
           <button className="btn btn-secondary mx-2" onClick={handleLogout}>
