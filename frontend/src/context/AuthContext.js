@@ -42,10 +42,17 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const isLoggedIn = () => {
+    const loggedIn = !!currentUser;
+    console.log('Is user logged in?', loggedIn);
+    return loggedIn;
+  };
+
   const value = {
     currentUser,
     login,
     logout,
+    isLoggedIn
   };
 
   return (

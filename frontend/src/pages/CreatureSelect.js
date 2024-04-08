@@ -1,18 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from "../components/Layout";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { getAllCreatures } from '../services/creatureApi';
 import CreatureRandomizer from "../components/creature_randomizer/creatureRandomizer";
 
-export default function CreatureSelect() {
+const CreatureSelect = () => {
+  const { currentUser, isLoggedIn } = useAuth(); // Use isLoggedIn from useAuth
   const numberOfCreatures = 3;
-  const [refreshKey, setRefreshKey] = useState(0); // State to trigger refresh
+  const [refreshKey, setRefreshKey] = useState(0);
+  const navigate = useNavigate();
+  const [existingCreatures, setExistingCreatures] = useState([]);
+
+  const authCheck = () => {
+    if (!isLoggedIn()) {
+      console.log("isLoggedIn:", isLoggedIn);
+      navigate("/home");
+    }
+  };
+
+  const creatureCheck = () => {
+    existingCreatures.forEach(creature => {
+      if (creature.UserId === currentUser.id) {
+        navigate("/home");
+      }
+    });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const cre = await getAllCreatures();
+        setExistingCreatures(cre);
+      } catch (error) {
+        console.error('Error fetching creatures:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    authCheck();
+    creatureCheck();
+  }, [currentUser, isLoggedIn, existingCreatures]);
+
   const creatures = Array.from({ length: numberOfCreatures }, (_, index) => (
     <div key={index} className="col-12 col-sm-4 col-md-4">
-      <CreatureRandomizer key={index + refreshKey} /> {/* Add key for re-rendering */}
+      <CreatureRandomizer key={index + refreshKey} />
     </div>
   ));
 
   const handleRefresh = () => {
-    setRefreshKey((prevKey) => prevKey + 1); // Update refresh key to trigger re-render
+    setRefreshKey((prevKey) => prevKey + 1);
   };
 
   return (
@@ -31,3 +70,5 @@ export default function CreatureSelect() {
     </Layout>
   );
 }
+
+export default CreatureSelect;

@@ -14,4 +14,17 @@ const createCreature = async (creatureData) => {
     }
 };
 
-export { createCreature };
+const getAllCreatures = async () => {
+    try
+    {
+        const response = await axios.get(`${API_URL}/get/all`)
+        return response.data;
+    }
+    catch (error)
+    {
+        console.error('Error getting creatures:', error)
+        throw error;
+    }
+}
+
+export { createCreature, getAllCreatures };
