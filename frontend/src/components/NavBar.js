@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom"; // Importing Link so that the navbar can navigate using routes
+import { useAuth } from "../context/AuthContext";
 
 // This function creates the navbar for the layout and returns it
-export default function NavBar({ isLoggedIn, handleLogout }) {
+export default function NavBar() {
+  const { currentUser, logout } = useAuth();
   return (
     <nav className="navbar navbar-expand-lg bg-secondary" data-bs-theme="dark">
       <div className="container-fluid">
@@ -42,9 +44,9 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
             </li>
           </ul>
           <ul className="navbar-nav ms-auto">
-            {isLoggedIn ? (
+            {currentUser ? (
               <li className="nav-item">
-                <button className="nav-link text-dark" onClick={handleLogout}>
+                <button className="nav-link text-dark" onClick={logout}>
                   Logout
                 </button>
               </li>
