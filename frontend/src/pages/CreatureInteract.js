@@ -31,19 +31,11 @@ const CreatureInteract = () => {
     return images;
   }
 
-  // Dear dumbass Bergen,
-  //
-  // Remember to setup User Detection
-  // Sincerely,
-  // Bergen
-  //
-  // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const creatures = await getAllCreatures();
-        const userCreature = creatures.find((c) => c.UserId === 1);
+        const userCreature = creatures.find((c) => c.UserId === currentUser.id);
         if (!userCreature) {
           navigate("/home");
           return;
