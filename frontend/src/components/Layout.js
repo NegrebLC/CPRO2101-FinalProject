@@ -5,12 +5,11 @@ import { useAuth } from "../context/AuthContext";
 
 //This method allows me to easily make a layout for each page to follow
 const Layout = ({ children }) => {
-  const { isLoggedIn, logout } = useAuth();
-  console.log("isLoggedIn:", isLoggedIn);
+  const { logout } = useAuth();
 
   return ( //within the 'main' section, the page is rendered
     <>
-        <NavBar isLoggedIn={isLoggedIn} handleLogout={logout}/>
+        <NavBar handleLogout={logout}/>
         <div className="container">
           <main role="main" className="pb-3">
             { children }

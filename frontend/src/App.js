@@ -20,7 +20,9 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/creature-select" element={<CreatureSelect />} />
+          <Route
+            path="/creature-select" 
+            element={<PrivateRoute element={CreatureSelect} roles={["user"]} redirectPath="/no-access"/>} />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/no-access" element={<NoAccess />} />
           <Route
