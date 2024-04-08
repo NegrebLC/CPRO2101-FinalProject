@@ -26,12 +26,13 @@ exports.createUser = async (req, res) => {
     console.log(`Hashing password...`);
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    //generating the new user with a hashed password and generated id
+    //generating the new user with a hashed password, generated id, and set role to "user" by default
     console.log(`Setting User details...`);
     const newUser = new User({
       ...req.body,
       password: hashedPassword,
       _id: req.body._id,
+      role: "user"
     });
 
     console.log(`Creating User:  ${newUser}`);

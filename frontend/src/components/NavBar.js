@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom"; // Importing Link so that the navbar can navigate using routes
 
 // This function creates the navbar for the layout and returns it
-export default function NavBar() {
+export default function NavBar({ isLoggedIn, handleLogout }) {
   return (
     <nav className="navbar navbar-expand-lg bg-secondary" data-bs-theme="dark">
       <div className="container-fluid">
@@ -40,6 +40,28 @@ export default function NavBar() {
                 Support
               </Link>
             </li>
+          </ul>
+          <ul className="navbar-nav ms-auto">
+            {isLoggedIn ? (
+              <li className="nav-item">
+                <button className="nav-link text-dark" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link text-dark" to="/login">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link text-dark" to="/register">
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
