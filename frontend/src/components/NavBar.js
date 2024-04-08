@@ -46,9 +46,9 @@ export default function NavBar() {
           <ul className="navbar-nav ms-auto">
             {currentUser ? (
               <li className="nav-item">
-                <button className="nav-link text-dark" onClick={logout}>
+                <Link className="nav-link text-dark" to="/logout">
                   Logout
-                </button>
+                </Link>
               </li>
             ) : (
               <>

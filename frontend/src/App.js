@@ -9,6 +9,7 @@ import AgentLoginPage from "./pages/support/AgentLoginPage";
 import UserRegistration from "./pages/UserRegistration";
 import Login from "./pages/UserLogin";
 import CreatureSelect from "./pages/CreatureSelect"
+import Logout from "./pages/Logout"
 import PrivateRoute from "./context/PrivateRoute";
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
             element={<PrivateRoute element={CreatureSelect} roles={["user"]} redirectPath="/no-access"/>} />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/no-access" element={<NoAccess />} />
+          <Route path="/logout" element={<Logout />} />
           <Route
             path="/support"
             element={<PrivateRoute element={UserSupport} roles={["user", "agent"]} redirectPath="/no-access"/>}
