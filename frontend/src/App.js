@@ -32,6 +32,16 @@ export default function App() {
               />
             }
           />
+          <Route
+            path="/my-creature"
+            element={
+              <PrivateRoute
+                element={CreatureInteract}
+                roles={["user"]}
+                redirectPath="/no-access"
+              />
+            }
+          />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/no-access" element={<NoAccess />} />
           <Route path="/logout" element={<Logout />} />
@@ -46,7 +56,6 @@ export default function App() {
             }
           />
           <Route path="/agents/login" element={<AgentLoginPage />} />
-          <Route path="/my-creature" element={<CreatureInteract />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
