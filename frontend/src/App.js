@@ -7,6 +7,8 @@ import UserSupport from "./pages/support/ChatPage";
 import AgentLoginPage from "./pages/support/AgentLoginPage";
 import UserRegistration from "./pages/UserRegistration";
 import Login from "./pages/UserLogin";
+import CreatureSelect from "./pages/CreatureSelect";
+import CreatureInteract from "./pages/CreatureInteract";
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
           <Route path="/agents/login" element={<AgentLoginPage />} />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/creature-select" element={<CreatureSelect />} />
+          <Route path="/my-creature" element={<CreatureInteract />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>

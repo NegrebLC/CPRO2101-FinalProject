@@ -26,6 +26,16 @@ export default function NavBar() {
               </Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link text-dark" to="/creature-select">
+                Creature Select
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-dark" to="/my-creature">
+                My Creature
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link text-dark" to="/about">
                 About
               </Link>
