@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
+import NoAccess from "./pages/NoAccess";
 import UserSupport from "./pages/support/ChatPage";
 import AgentLoginPage from "./pages/support/AgentLoginPage";
 import UserRegistration from "./pages/UserRegistration";
@@ -19,9 +20,10 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<UserRegistration />} />
+          <Route path="/no-access" element={<NoAccess />} />
           <Route
             path="/support"
-            element={<PrivateRoute element={UserSupport} roles={["user", "agent"]} />}
+            element={<PrivateRoute element={UserSupport} roles={["user", "agent"]} redirectPath="/no-access"/>}
           />
           <Route path="/agents/login" element={<AgentLoginPage />} />
           <Route path="*" element={<NoPage />} />
