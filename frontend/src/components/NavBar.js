@@ -10,7 +10,8 @@ export default function NavBar() {
   
   return (
     <Navbar bg="secondary" variant="dark" expand="lg">
-      <Navbar.Brand href="#home">Fugglets!</Navbar.Brand>
+      <Navbar.Brand href="/home">Fugglets!</Navbar.Brand>
+      {currentUser && <Navbar.Text className="px-3">Welcome, {currentUser.username}!</Navbar.Text>}
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
