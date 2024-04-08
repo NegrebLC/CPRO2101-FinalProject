@@ -55,7 +55,7 @@ const CreatureSelect = () => {
   {
     return (
       <Layout>
-        <div class="text-center mt-4">
+        <div className="text-center mt-4">
           Loading...
         </div>
       </Layout>);
