@@ -8,6 +8,7 @@ import UserSupport from "./pages/support/ChatPage";
 import AgentLoginPage from "./pages/support/AgentLoginPage";
 import UserRegistration from "./pages/UserRegistration";
 import Login from "./pages/UserLogin";
+import Logout from "./pages/Logout"
 import PrivateRoute from "./context/PrivateRoute";
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/no-access" element={<NoAccess />} />
+          <Route path="/logout" element={<Logout />} />
           <Route
             path="/support"
             element={<PrivateRoute element={UserSupport} roles={["user", "agent"]} redirectPath="/no-access"/>}
