@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import Layout from "../components/Layout";
 import { loginError } from '../services/errorHandler';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 
 function UserLogin() {
   const [user, setUser] = useState({
@@ -15,6 +16,8 @@ function UserLogin() {
   const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,6 +45,10 @@ function UserLogin() {
     setValidated(true);
   };
 
+  const handleShowPassword = () =>{
+    setShowPassword(!showPassword);
+  }
+
   return (
     <Layout title="Login">
       <h2 className="display-3 mb-4 text-center">Login</h2>
@@ -63,12 +70,23 @@ function UserLogin() {
 
           <Form.Group className="mb-3" controlId="formPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              required
-              value={user.password || ""}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
+            <div className="row">
+              <div className='input-group'>
+                <span className='col-9 input-group-text'>
+                  <Form.Control
+                    type={ showPassword ? "text" : "password" }
+                    required
+                    value={user.password || ""}
+                    onChange={(e) => setUser({ ...user, password: e.target.value })}
+                  />
+                </span>
+                <span className='col-3 input-group-text'>
+                  <Button className="  btn-info" onClick={handleShowPassword}>
+                    {showPassword ? <BsFillEyeFill /> : <BsFillEyeSlashFill />} {/* Eye icons */}
+                  </Button>
+                </span>
+              </div>
+            </div>
             <Form.Control.Feedback type="invalid">
               Please provide your password.
             </Form.Control.Feedback>

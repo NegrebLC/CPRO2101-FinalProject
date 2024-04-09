@@ -19,3 +19,19 @@ export function validatePassword(password) {
         ""
     );
 }
+
+export function validateEmail(email) {
+    return (
+        !email.trim() ? "Please enter a valid email address." :
+        !/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email) ? "Please enter a valid email address." :
+        ""
+    );
+}
+
+export function validateConfirmPassword(confirmPassword, password) {
+    return (
+        !confirmPassword.trim()? "Please confirm your password.":
+        password !== confirmPassword ? "Passwords do not match.":
+        ""
+    );
+}
