@@ -3,10 +3,10 @@ import { createCreature } from '../../services/creatureApi';
 import { useNavigate } from 'react-router-dom';
 import "./creatureRandomizer.css";
 
-const MAX_HEAD_ID = 3;
-const MAX_BODY_ID = 3;
-const MAX_ARMS_ID = 3;
-const MAX_LEGS_ID = 3;
+const MAX_HEAD_ID = 7;
+const MAX_BODY_ID = 5;
+const MAX_ARMS_ID = 4;
+const MAX_LEGS_ID = 4;
 const NAMES = ["Jerk", "Buddy", "Sweetheart", "Pal", "Friend", "Baby", "Silly Billy", "pwease"]
 
 function generateName(MAX) {

@@ -6,9 +6,7 @@ export default function About()
         <Layout>
             <h2 className="display-4 mb-4">About Page</h2>
 
-            <p className="">
-                Waow cats.
-            </p>
+            <p className="">Fugglets are randomly generated digital pets for you to take care of!</p>
         </Layout> 
     )
 }

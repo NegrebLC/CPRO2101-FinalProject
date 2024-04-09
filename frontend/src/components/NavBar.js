@@ -18,8 +18,8 @@ export default function NavBar() {
         <Nav className="me-auto">
           <Nav.Link as={Link} to="/home">Home</Nav.Link>
           <Nav.Link as={Link} to="/creature-select">My Fugglet</Nav.Link>
-          <Nav.Link as={Link} to="/about">About</Nav.Link>
           <Nav.Link as={Link} to="/support">Support</Nav.Link>
+          <Nav.Link as={Link} to="/about">About</Nav.Link>
         </Nav>
         <Nav>
           <div className="d-flex align-items-center">
