@@ -32,6 +32,10 @@ export function validateConfirmPassword(confirmPassword, password) {
     return (
         !confirmPassword.trim()? "Please confirm your password.":
         password !== confirmPassword ? "Passwords do not match.":
+        !/[A-Z]/.test(password) ? "Passwords do not match." :
+        !/[a-z]/.test(password) ? "Passwords do not match." :
+        !/[0-9]/.test(password) ? "Passwords do not match." :
+        !/[^a-zA-Z0-9]/.test(password) ? "Passwords do not match." :
         ""
     );
 }

@@ -53,6 +53,7 @@ function UserLogin() {
     <Layout title="Login">
       <h2 className="display-3 mb-4 text-center">Login</h2>
       <div className="d-flex flex-column justify-content-center align-items-center">
+      <div className=" col-md-6 ">
         {error && <Alert variant="danger">{error}</Alert>}
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formUserame">
@@ -68,25 +69,19 @@ function UserLogin() {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <div className="row">
-              <div className='input-group'>
-                <span className='col-9 input-group-text'>
-                  <Form.Control
-                    type={ showPassword ? "text" : "password" }
-                    required
-                    value={user.password || ""}
-                    onChange={(e) => setUser({ ...user, password: e.target.value })}
-                  />
-                </span>
-                <span className='col-3 input-group-text'>
-                  <Button className="  btn-info" onClick={handleShowPassword}>
-                    {showPassword ? <BsFillEyeFill /> : <BsFillEyeSlashFill />} {/* Eye icons */}
+          <Form.Label>Password</Form.Label>
+          <Form.Group className="mb-3  input-group" controlId="formPassword">
+            
+                <Form.Control
+                  type={ showPassword ? "text" : "password" } 
+                  value={user.password || ''} required
+                  onChange={(e) => setUser({ ...user, password: e.target.value })}
+                />
+                <div>
+                  <Button className="col-3 btn-info" onClick={handleShowPassword}>
+                    {showPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />} {/* Eye icons */}
                   </Button>
-                </span>
-              </div>
-            </div>
+                </div>
             <Form.Control.Feedback type="invalid">
               Please provide your password.
             </Form.Control.Feedback>
@@ -95,6 +90,7 @@ function UserLogin() {
               Login
             </Button>
         </Form>
+        </div>
       </div>
     </Layout>
   );

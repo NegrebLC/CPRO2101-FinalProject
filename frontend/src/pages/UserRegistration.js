@@ -70,82 +70,77 @@ const UserRegistration = () => {
         <Layout title='User Registration'>
             <h2 className="display-3 mb-4 text-center">Register</h2>
             <div className="d-flex flex-column justify-content-center align-items-center">
-                {error && <Alert variant="danger">{error}</Alert>}
-                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <div className="col-md-6">
+                    {error && <Alert variant="danger">{error}</Alert>}
+                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
 
-                    <Form.Group className="mb-3" controlId="formUsername">
-                        <Form.Label>Username*</Form.Label>
-                        <Form.Control
-                            type="text" value={user.username || ''} required minLength={6} maxLength={30}
-                            onChange={handleUsernameChange}
-                            isInvalid={user.username && usernameError} isValid={user.username && isValidUsername}
-                        />
-                        {usernameError && (
-                            <Form.Control.Feedback type="invalid">
-                                {usernameError}
-                            </Form.Control.Feedback>
-                        )}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formEmail">
-                        <Form.Label>Email*</Form.Label>
-                        <Form.Control type='email' required 
-                            pattern='^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$' value={user.email || ''} 
-                            onChange={handleEmailChange}
-                            isInvalid={user.email && emailError} isValid={user.email && isValidEmail}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please enter a valid email address. 
-                        </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label>Password*</Form.Label>
-                        <div className="row">
-                            <div className='input-group'>
-                            <span className='col-9 input-group-text'>
-                                <Form.Control
-                                    type={ showPassword ? "text" : "password" } value={user.password || ''} required minLength={6} maxLength={30}
-                                    onChange={handlePasswordChange}
-                                    pattern='(?=.*[!@#$%^&*(),.?":{}|<>0-9])(?=.*[A-Z])(?=.*[a-z]).{6,30}'
-                                    isInvalid={user.password && passwordError} isValid={user.password && isValidPassword}
-                                />
-                            </span>
-                            <span className='col-3 input-group-text'>
-                                <Button className="  btn-info" onClick={handleShowPassword}>
-                                    {showPassword ? <BsFillEyeFill /> : <BsFillEyeSlashFill />} {/* Eye icons */}
-                                </Button>
-                            </span>
-                            </div>
-                        </div>
-                            {passwordError && (
+                        <Form.Group className="mb-3" controlId="formUsername">
+                            <Form.Label>Username*</Form.Label>
+                            <Form.Control
+                                type="text" value={user.username || ''} required minLength={6} maxLength={30}
+                                onChange={handleUsernameChange}
+                                isInvalid={user.username && usernameError} isValid={user.username && isValidUsername}
+                            />
+                            {usernameError && (
                                 <Form.Control.Feedback type="invalid">
-                                    {passwordError}
+                                    {usernameError}
                                 </Form.Control.Feedback>
                             )}
-                    </Form.Group>
+                        </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formConfirmPassword">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <div className='input-group-text'>
-                        <Form.Control
-                             type={ showPassword ? "text" : "password" } required
-                             value={user.confirmPassword}
-                            onChange={handleConfirmPasswordChange}
-                            isInvalid={user.confirmPassword && confirmPasswordError} isValid={user.confirmPassword && isValidConfirmPassword}
-                        />
-                        {user.password !== user.confirmPassword && (
-                            <Form.Text className="text-danger">
-                                Passwords do not match.
-                            </Form.Text>
-                        )}
-                        </div>
-                    </Form.Group>
+                        <Form.Group className="mb-3" controlId="formEmail">
+                            <Form.Label>Email*</Form.Label>
+                            <Form.Control type='email' required 
+                                pattern='^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$' value={user.email || ''} 
+                                onChange={handleEmailChange}
+                                isInvalid={user.email && emailError} isValid={user.email && isValidEmail}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter a valid email address. 
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                    <Button variant="primary" type="submit">
-                        Register
-                    </Button>
-                </Form>
+                        
+                            <Form.Label>Password*</Form.Label>
+                        <Form.Group className="mb-3 input-group" controlId="formPassword">
+                                    <Form.Control
+                                        type={ showPassword ? "text" : "password" } value={user.password || ''} required minLength={6} maxLength={30}
+                                        onChange={handlePasswordChange}
+                                        pattern='(?=.*[!@#$%^&*(),.?":{}|<>0-9])(?=.*[A-Z])(?=.*[a-z]).{6,30}'
+                                        isInvalid={user.password && passwordError} isValid={user.password && isValidPassword}
+                                    />
+                                    <div>
+                                <Button className="col-3 btn-info" onClick={handleShowPassword}>
+                                    {showPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />} {/* Eye icons */}
+                                </Button></div>
+                                {passwordError && (
+                                    <Form.Control.Feedback type="invalid">
+                                        {passwordError}
+                                    </Form.Control.Feedback>
+                                )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formConfirmPassword">
+                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Control
+                                type={ showPassword ? "text" : "password" } required
+                                value={user.confirmPassword}
+                                onChange={handleConfirmPasswordChange}
+                                pattern={user.password ? `(?=${user.password}).{6,30}` : ''}
+                                isInvalid={user.confirmPassword && confirmPasswordError} isValid={user.confirmPassword && isValidConfirmPassword}
+                                    />
+                                {confirmPasswordError && (
+                                    <Form.Control.Feedback type="invalid">
+                                        {confirmPasswordError}
+                                    </Form.Control.Feedback>
+                                )}
+                        </Form.Group>
+
+                        <Button variant="primary" type="submit">
+                            Register
+                        </Button>
+                    </Form>
+                </div>
             </div>
         </Layout>
     );
