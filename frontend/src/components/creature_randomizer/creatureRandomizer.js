@@ -9,24 +9,30 @@ const MAX_ARMS_ID = 7;
 const MAX_LEGS_ID = 7;
 const NAMES = ["Jerk", "Buddy", "Sweetheart", "Pal", "Friend", "Baby", "Silly Billy", "pwease"]
 
+//function that generates a name based off the NAMES array
 function generateName(MAX) {
     return Math.floor(Math.random() * MAX);
 }
 
+//functio nthat generates a partId for a given part
 function generateId(MAX) {
     return Math.floor(Math.random() * MAX) + 1;
 }
 
+//function that imports the images from the component
 function importAll(r) {
     let images = {};
     r.keys().map(item => { images[item.replace('./', '')] = r(item); });
     return images;
 }
 
+//importing all pngs
 const images = importAll(require.context('./images', false, /\.png$/));
 
+//export function of the randomizer
 export default function CreatureRandomizer({ userId }) {
 
+    //sets the object values to be passed to the backend based on generated and pulled ids
     const [creatureAttributes, setCreatureAttributes] = useState({
         UserId: userId,
         HeadId: generateId(MAX_HEAD_ID),
@@ -37,20 +43,24 @@ export default function CreatureRandomizer({ userId }) {
         Hunger: 24,
     });
 
+    //calling the name generator
     const [name, setName] = useState(NAMES[generateName(NAMES.length)]);
     const [formName, setFormName] = useState('');
 
     const navigate = useNavigate();
 
+    //use effect to set the generated name values
     useEffect(() => {
         setName(NAMES[generateName(NAMES.length)]);
     }, []);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormName(value);
     };
 
+    //method that handles the button submit and saves a creature to the db
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -67,6 +77,7 @@ export default function CreatureRandomizer({ userId }) {
         }
     };
 
+    //returning the elements to construct a creature
     return (
         <div className="container mb-2">
             <div className="d-flex flex-column align-items-center justify-content-center">
