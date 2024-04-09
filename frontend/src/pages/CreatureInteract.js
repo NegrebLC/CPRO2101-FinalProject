@@ -32,6 +32,7 @@ const CreatureInteract = () => {
     require.context("../components/creature_randomizer/images", false, /\.png$/)
   );
   const [currency, setCurrency] = useState(0);
+  const [purchaseMessage, setPurchaseMessage] = useState();
 
   function importAll(r) {
     let images = {};
@@ -45,6 +46,14 @@ const CreatureInteract = () => {
 
   const subCurrency = (value) => {
     setCurrency((prevCurrency) => prevCurrency - value);
+  };
+
+  const purchaseFailed = () => {
+    setPurchaseMessage("Not Enough Money!");
+  };
+
+  const purchaseSuccess = () => {
+    setPurchaseMessage("Purchase was successful!");
   };
 
   useEffect(() => {
@@ -138,9 +147,11 @@ const CreatureInteract = () => {
         if (item.emoji === foodPreference.emoji) {
           setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
           subCurrency(item.cost);
+          purchaseSuccess();
         } else {
           setHunger((hunger) => Math.min(24, hunger + item.effect));
           subCurrency(item.cost);
+          purchaseSuccess();
         }
         updateCreatureValues(creature._id, {
           Hunger: Math.min(24, hunger + item.effect),
@@ -151,14 +162,18 @@ const CreatureInteract = () => {
             Math.min(50, happiness + item.effect * 4)
           );
           subCurrency(item.cost);
+          purchaseSuccess();
         } else {
           setHappiness((happiness) => Math.min(50, happiness + item.effect));
           subCurrency(item.cost);
+          purchaseSuccess();
         }
         updateCreatureValues(creature._id, {
           Happiness: Math.min(50, happiness + item.effect),
         });
       }
+    } else if (item.cost >= currency) {
+      purchaseFailed();
     }
   };
 
@@ -168,9 +183,11 @@ const CreatureInteract = () => {
         if (item.emoji === foodPreference.emoji) {
           setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
           subCurrency(item.cost);
+          purchaseSuccess();
         } else {
           setHunger((hunger) => Math.min(24, hunger + item.effect));
           subCurrency(item.cost);
+          purchaseSuccess();
         }
         updateCreatureValues(creature._id, {
           Hunger: Math.min(24, hunger + item.effect),
@@ -181,14 +198,20 @@ const CreatureInteract = () => {
             Math.min(50, happiness + item.effect * 4)
           );
           subCurrency(item.cost);
+          purchaseSuccess();
         } else {
           setHappiness((happiness) => Math.min(50, happiness + item.effect));
           subCurrency(item.cost);
+          purchaseSuccess();
         }
         updateCreatureValues(creature._id, {
           Happiness: Math.min(50, happiness + item.effect),
         });
+      } else {
+        purchaseFailed();
       }
+    } else if (item.cost >= currency) {
+      purchaseFailed();
     }
   };
 
@@ -349,11 +372,14 @@ const CreatureInteract = () => {
               </div>
             </div>
           </div>
-          <div className="display-4 mb-2 text-center">${currency}</div>
           <div className="container col-6">
-            <button className="btn btn-outline-warning" onClick={addCurrency}>
-              Get Money
-            </button>
+            <div className="display-4 mb-2 text-center">{purchaseMessage}</div>
+            <div className="display-4 mb-2 text-center">${currency}</div>
+            <div className="container col-6">
+              <button className="btn btn-outline-warning" onClick={addCurrency}>
+                Get Money
+              </button>
+            </div>
           </div>
         </div>
       </div>
