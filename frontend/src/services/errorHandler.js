@@ -12,3 +12,12 @@ export const code409Error = (error, setError) => {
         setError("An unexpected error occurred while processing your request.");
     }
 };
+
+//intentionally vague to avoid revealing usernames that exist
+export const loginError = (error, setError) => {
+    if (error.response && (error.response.status === 400)||(error.response.status === 401)) {
+        setError("Username or password is incorrect.");
+    } else {
+        setError("An unexpected error occurred while processing your request.");
+    }
+};

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import Layout from "../components/Layout";
+import { loginError } from '../services/errorHandler';
 
 function UserLogin() {
   const [user, setUser] = useState({
@@ -32,7 +33,11 @@ function UserLogin() {
         );
       }
     } catch (error) {
-      setError(error.message);
+      if (error.response) {
+        loginError(error, setError);
+      } else {
+        setError("An unexpected error occurred while processing your request.");
+      }
     }
     setValidated(true);
   };
