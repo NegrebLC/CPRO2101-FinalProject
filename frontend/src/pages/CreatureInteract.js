@@ -7,12 +7,12 @@ import StatusBar from "../components/creature-interact/StatusBar";
 import "../components/creature-interact/creatureInteract.css";
 
 const draggableItems = [
-  { type: "food", emoji: "🍎", effect: 2 },
-  { type: "food", emoji: "🍔", effect: 2 },
-  { type: "food", emoji: "🥕", effect: 2 },
-  { type: "play", emoji: "⚽", effect: 5 },
-  { type: "play", emoji: "🎮", effect: 5 },
-  { type: "play", emoji: "🧩", effect: 5 },
+  { type: "food", emoji: "🍎", effect: 2, cost: 2 },
+  { type: "food", emoji: "🍔", effect: 2, cost: 3 },
+  { type: "food", emoji: "🥕", effect: 2, cost: 4 },
+  { type: "play", emoji: "⚽", effect: 5, cost: 5 },
+  { type: "play", emoji: "🎮", effect: 5, cost: 6 },
+  { type: "play", emoji: "🧩", effect: 5, cost: 7 },
 ];
 
 const CreatureInteract = () => {
@@ -31,12 +31,21 @@ const CreatureInteract = () => {
   const images = importAll(
     require.context("../components/creature_randomizer/images", false, /\.png$/)
   );
+  const [currency, setCurrency] = useState(0);
 
   function importAll(r) {
     let images = {};
     r.keys().map((item) => (images[item.replace("./", "")] = r(item)));
     return images;
   }
+
+  const addCurrency = () => {
+    setCurrency((prevCurrency) => prevCurrency + 1);
+  };
+
+  const subCurrency = (value) => {
+    setCurrency((prevCurrency) => prevCurrency - value);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -124,46 +133,62 @@ const CreatureInteract = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     const item = JSON.parse(e.dataTransfer.getData("item"));
-    if (item.type === "food") {
-      if (item.emoji === foodPreference.emoji) {
-        setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
-      } else {
-        setHunger((hunger) => Math.min(24, hunger + item.effect));
+    if (item.cost <= currency) {
+      if (item.type === "food") {
+        if (item.emoji === foodPreference.emoji) {
+          setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
+          subCurrency(item.cost);
+        } else {
+          setHunger((hunger) => Math.min(24, hunger + item.effect));
+          subCurrency(item.cost);
+        }
+        updateCreatureValues(creature._id, {
+          Hunger: Math.min(24, hunger + item.effect),
+        });
+      } else if (item.type === "play") {
+        if (item.emoji === playPreference.emoji) {
+          setHappiness((happiness) =>
+            Math.min(50, happiness + item.effect * 4)
+          );
+          subCurrency(item.cost);
+        } else {
+          setHappiness((happiness) => Math.min(50, happiness + item.effect));
+          subCurrency(item.cost);
+        }
+        updateCreatureValues(creature._id, {
+          Happiness: Math.min(50, happiness + item.effect),
+        });
       }
-      updateCreatureValues(creature._id, {
-        Hunger: Math.min(24, hunger + item.effect),
-      });
-    } else if (item.type === "play") {
-      if (item.emoji === playPreference.emoji) {
-        setHappiness((happiness) => Math.min(50, happiness + item.effect * 4));
-      } else {
-        setHappiness((happiness) => Math.min(50, happiness + item.effect));
-      }
-      updateCreatureValues(creature._id, {
-        Happiness: Math.min(50, happiness + item.effect),
-      });
     }
   };
 
   const handleItemUse = (item) => {
-    if (item.type === "food") {
-      if (item.emoji === foodPreference.emoji) {
-        setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
-      } else {
-        setHunger((hunger) => Math.min(24, hunger + item.effect));
+    if (item.cost <= currency) {
+      if (item.type === "food") {
+        if (item.emoji === foodPreference.emoji) {
+          setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
+          subCurrency(item.cost);
+        } else {
+          setHunger((hunger) => Math.min(24, hunger + item.effect));
+          subCurrency(item.cost);
+        }
+        updateCreatureValues(creature._id, {
+          Hunger: Math.min(24, hunger + item.effect),
+        });
+      } else if (item.type === "play") {
+        if (item.emoji === playPreference.emoji) {
+          setHappiness((happiness) =>
+            Math.min(50, happiness + item.effect * 4)
+          );
+          subCurrency(item.cost);
+        } else {
+          setHappiness((happiness) => Math.min(50, happiness + item.effect));
+          subCurrency(item.cost);
+        }
+        updateCreatureValues(creature._id, {
+          Happiness: Math.min(50, happiness + item.effect),
+        });
       }
-      updateCreatureValues(creature._id, {
-        Hunger: Math.min(24, hunger + item.effect),
-      });
-    } else if (item.type === "play") {
-      if (item.emoji === playPreference.emoji) {
-        setHappiness((happiness) => Math.min(50, happiness + item.effect * 4));
-      } else {
-        setHappiness((happiness) => Math.min(50, happiness + item.effect));
-      }
-      updateCreatureValues(creature._id, {
-        Happiness: Math.min(50, happiness + item.effect),
-      });
     }
   };
 
@@ -246,7 +271,7 @@ const CreatureInteract = () => {
                         onClick={() => handleItemUse(item)}
                         className="emoji mb-3 btn btn-light emoji-btn"
                       >
-                        {item.emoji}
+                        {item.emoji}: ${item.cost}
                       </button>
                     ) : (
                       <div
@@ -256,7 +281,7 @@ const CreatureInteract = () => {
                         className="emoji mb-3"
                         style={{ fontSize: "2em" }}
                       >
-                        {item.emoji}
+                        {item.emoji}: ${item.cost}
                       </div>
                     )
                   )}
@@ -293,7 +318,7 @@ const CreatureInteract = () => {
                         className="emoji mb-3 btn btn-light emoji-btn"
                         style={{ fontSize: "2em" }}
                       >
-                        {item.emoji}
+                        {item.emoji}: ${item.cost}
                       </button>
                     ) : (
                       <div
@@ -303,7 +328,7 @@ const CreatureInteract = () => {
                         className="emoji mb-3"
                         style={{ fontSize: "2em" }}
                       >
-                        {item.emoji}
+                        {item.emoji}: ${item.cost}
                       </div>
                     )
                   )}
@@ -323,6 +348,12 @@ const CreatureInteract = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="display-4 mb-2 text-center">${currency}</div>
+          <div className="container col-6">
+            <button className="btn btn-outline-warning" onClick={addCurrency}>
+              Get Money
+            </button>
           </div>
         </div>
       </div>
