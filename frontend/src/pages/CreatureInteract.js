@@ -8,11 +8,11 @@ import "../components/creature-interact/creatureInteract.css";
 
 const draggableItems = [
   { type: "food", emoji: "🍎", effect: 2, cost: 2 },
-  { type: "food", emoji: "🍔", effect: 2, cost: 3 },
-  { type: "food", emoji: "🥕", effect: 2, cost: 4 },
-  { type: "play", emoji: "⚽", effect: 5, cost: 5 },
-  { type: "play", emoji: "🎮", effect: 5, cost: 6 },
-  { type: "play", emoji: "🧩", effect: 5, cost: 7 },
+  { type: "food", emoji: "🍔", effect: 2, cost: 4 },
+  { type: "food", emoji: "🥕", effect: 2, cost: 3 },
+  { type: "play", emoji: "⚽", effect: 5, cost: 6 },
+  { type: "play", emoji: "🎮", effect: 5, cost: 7 },
+  { type: "play", emoji: "🧩", effect: 5, cost: 5 },
 ];
 
 const CreatureInteract = () => {
