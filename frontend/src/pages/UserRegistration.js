@@ -3,7 +3,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Layout from '../components/Layout';
-import { validateUsername, validatePassword } from '../services/validation';
+import { validateUsername, validatePassword, validateEmail, validateConfirmPassword } from '../services/validation';
 import { code409Error } from '../services/errorHandler';
 
 const UserRegistration = () => {
@@ -43,11 +43,21 @@ const UserRegistration = () => {
     const handlePasswordChange = (e) => { 
         setUser({ ...user, password: e.target.value });
     };
+    const handleEmailChange = (e) => { 
+        setUser({ ...user, email: e.target.value });
+    };
+    const handleConfirmPasswordChange = (e) => { 
+        setUser({ ...user, confirmPassword: e.target.value });
+    };
 
     const usernameError = validateUsername(user.username);
     const passwordError = validatePassword(user.password);
-    const isValidUsername = !usernameError && !!user.username;
-    const isValidPassword = !passwordError && !!user.password;
+    const emailError = validateEmail(user.email);
+    const confirmPasswordError = validateConfirmPassword(user.confirmPassword, user.password)
+    const isValidUsername = !usernameError && user.username;
+    const isValidPassword = !passwordError && user.password;
+    const isValidEmail = !emailError && user.email;
+    const isValidConfirmPassword = !confirmPasswordError && user.confirmPassword;
 
 
     return (
@@ -75,7 +85,8 @@ const UserRegistration = () => {
                         <Form.Label>Email*</Form.Label>
                         <Form.Control type='email' required 
                             pattern='^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$' value={user.email || ''} 
-                            onChange={(e) => setUser({...user, email: e.target.value})}
+                            onChange={handleEmailChange}
+                            isInvalid={user.email && emailError} isValid={user.email && isValidEmail}
                         />
                         <Form.Control.Feedback type="invalid">
                             Please enter a valid email address. 
@@ -100,13 +111,10 @@ const UserRegistration = () => {
                     <Form.Group className="mb-3" controlId="formConfirmPassword">
                         <Form.Label>Confirm Password</Form.Label>
                         <Form.Control
-                            type="password" required
-                            value={user.confirmPassword}
-                            onChange={(e) => setUser({...user, confirmPassword: e.target.value})} 
+                            type="password" required value={user.confirmPassword}
+                            onChange={handleConfirmPasswordChange}
+                            isInvalid={user.confirmPassword && confirmPasswordError} isValid={user.confirmPassword && isValidConfirmPassword}
                         />
-                        <Form.Control.Feedback type="invalid">
-                            Please confirm your password.
-                        </Form.Control.Feedback>
                         {user.password !== user.confirmPassword && (
                             <Form.Text className="text-danger">
                                 Passwords do not match.
