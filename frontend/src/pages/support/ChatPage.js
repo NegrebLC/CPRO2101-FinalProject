@@ -21,6 +21,16 @@ const ChatPage = () => {
     fetchMessages(currentChat);
   }, [currentChat]);
 
+  useEffect(() => {
+    if (currentChat && currentChat._id) {
+      fetchMessages(currentChat);
+      const messageInterval = setInterval(() => {
+        fetchMessages(currentChat);
+      }, 5000);
+      return () => clearInterval(messageInterval);
+    }
+  }, [currentChat]);
+
   // Gets list of all chats for the user
   const fetchChats = async () => {
     try {
@@ -119,17 +129,19 @@ const ChatPage = () => {
               <button className="btn btn-primary" onClick={handleStartChat}>
                 Start Chat with Agent
               </button>
-              {currentChat && (
-                <button className="btn btn-danger" onClick={handleCloseChat}>
-                  Close Chat
-                </button>
-              )}
             </div>
           </div>
         )}
+        <button className="btn btn-danger" onClick={handleCloseChat}>
+          Close Chat
+        </button>
         <div className="row">
           <div className="col-md-4">
-            <ChatList chats={chats} onSelectChat={handleChatSelection} />
+            <ChatList
+              chats={chats}
+              onSelectChat={handleChatSelection}
+              currentChatId={currentChat?._id}
+            />
           </div>
           {currentChat && (
             <div
