@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Layout from '../components/Layout';
 import { validateUsername, validatePassword } from '../services/validation';
+import { code409Error } from '../services/errorHandler';
 
 const UserRegistration = () => {
     const [user, setUser] = useState({
@@ -19,22 +20,22 @@ const UserRegistration = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
-        try{
+        try {
             if (form.checkValidity() && user.password === user.confirmPassword) {
                 const userData = {
                     username: user.username,
                     email: user.email,
                     password: user.password
                 };
-                const response = await axios.post('http://localhost:5000/api/users/create', userData);
-                console.log('User created:', response.data);
+                await axios.post('http://localhost:5000/api/users/create', userData);
                 navigate('/login');
             }
         } catch (error) {
-            setError(error.message);
+            code409Error(error, setError);
         }
-        setValidated(true); 
+        setValidated(true);
     };
+
 
     const handleUsernameChange = (e) => {
         setUser({ ...user, username: e.target.value });
