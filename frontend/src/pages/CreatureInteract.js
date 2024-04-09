@@ -8,11 +8,11 @@ import "../components/creature-interact/creatureInteract.css";
 
 const draggableItems = [
   { type: "food", emoji: "🍎", effect: 2 },
-  { type: "food", emoji: "🍔", effect: 3 },
-  { type: "food", emoji: "🥕", effect: 1 },
-  { type: "play", emoji: "⚽", effect: 2 },
-  { type: "play", emoji: "🎮", effect: 8 },
-  { type: "play", emoji: "🧩", effect: 4 },
+  { type: "food", emoji: "🍔", effect: 2 },
+  { type: "food", emoji: "🥕", effect: 2 },
+  { type: "play", emoji: "⚽", effect: 5 },
+  { type: "play", emoji: "🎮", effect: 5 },
+  { type: "play", emoji: "🧩", effect: 5 },
 ];
 
 const CreatureInteract = () => {
@@ -21,6 +21,13 @@ const CreatureInteract = () => {
   const [creature, setCreature] = useState(null);
   const [hunger, setHunger] = useState(24);
   const [happiness, setHappiness] = useState(50);
+  const [foodPreference, setFoodPreference] = useState(
+    draggableItems.find((item) => item.type === "food")
+  );
+  const [playPreference, setPlayPreference] = useState(
+    draggableItems.find((item) => item.type === "play")
+  );
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const images = importAll(
     require.context("../components/creature_randomizer/images", false, /\.png$/)
   );
@@ -30,6 +37,15 @@ const CreatureInteract = () => {
     r.keys().map((item) => (images[item.replace("./", "")] = r(item)));
     return images;
   }
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +67,33 @@ const CreatureInteract = () => {
   }, [currentUser, navigate]);
 
   useEffect(() => {
+    const foodIntervalId = setInterval(() => {
+      const randomFoodIndex = Math.floor(
+        Math.random() *
+          draggableItems.filter((item) => item.type === "food").length
+      );
+      setFoodPreference(
+        draggableItems.filter((item) => item.type === "food")[randomFoodIndex]
+      );
+    }, 30000);
+
+    const playIntervalId = setInterval(() => {
+      const randomPlayIndex = Math.floor(
+        Math.random() *
+          draggableItems.filter((item) => item.type === "play").length
+      );
+      setPlayPreference(
+        draggableItems.filter((item) => item.type === "play")[randomPlayIndex]
+      );
+    }, 30000);
+
+    return () => {
+      clearInterval(foodIntervalId);
+      clearInterval(playIntervalId);
+    };
+  }, []);
+
+  useEffect(() => {
     const intervalId = setInterval(() => {
       setHappiness((prevHappiness) => {
         const newHappiness = Math.max(0, prevHappiness - 1);
@@ -69,7 +112,6 @@ const CreatureInteract = () => {
   const updateCreatureValues = async (id, values) => {
     try {
       await updateCreature(id, values);
-      console.log("Creature updated successfully");
     } catch (error) {
       console.error("Error updating creature:", error);
     }
@@ -83,16 +125,60 @@ const CreatureInteract = () => {
     e.preventDefault();
     const item = JSON.parse(e.dataTransfer.getData("item"));
     if (item.type === "food") {
-      setHunger((hunger) => Math.min(24, hunger + item.effect));
+      if (item.emoji === foodPreference.emoji) {
+        setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
+      } else {
+        setHunger((hunger) => Math.min(24, hunger + item.effect));
+      }
       updateCreatureValues(creature._id, {
         Hunger: Math.min(24, hunger + item.effect),
       });
     } else if (item.type === "play") {
-      setHappiness((happiness) => Math.min(50, happiness + item.effect));
+      if (item.emoji === playPreference.emoji) {
+        setHappiness((happiness) => Math.min(50, happiness + item.effect * 4));
+      } else {
+        setHappiness((happiness) => Math.min(50, happiness + item.effect));
+      }
       updateCreatureValues(creature._id, {
         Happiness: Math.min(50, happiness + item.effect),
       });
     }
+  };
+
+  const handleItemUse = (item) => {
+    if (item.type === "food") {
+      if (item.emoji === foodPreference.emoji) {
+        setHunger((hunger) => Math.min(24, hunger + item.effect * 4));
+      } else {
+        setHunger((hunger) => Math.min(24, hunger + item.effect));
+      }
+      updateCreatureValues(creature._id, {
+        Hunger: Math.min(24, hunger + item.effect),
+      });
+    } else if (item.type === "play") {
+      if (item.emoji === playPreference.emoji) {
+        setHappiness((happiness) => Math.min(50, happiness + item.effect * 4));
+      } else {
+        setHappiness((happiness) => Math.min(50, happiness + item.effect));
+      }
+      updateCreatureValues(creature._id, {
+        Happiness: Math.min(50, happiness + item.effect),
+      });
+    }
+  };
+
+  const getHungerMessage = () => {
+    if (hunger > 18) return "I'm full! " + foodPreference.emoji;
+    if (hunger > 12) return "I could eat a little. " + foodPreference.emoji;
+    if (hunger > 6) return "I'm getting hungry. " + foodPreference.emoji;
+    return "I'm starving! " + foodPreference.emoji;
+  };
+
+  const getHappinessMessage = () => {
+    if (happiness > 40) return "I'm so happy! " + playPreference.emoji;
+    if (happiness > 30) return "I'm pretty happy. " + playPreference.emoji;
+    if (happiness > 20) return "I could use some fun. " + playPreference.emoji;
+    return "I'm feeling down. " + playPreference.emoji;
   };
 
   if (!creature) return <Layout>No Creature Found!</Layout>;
@@ -101,30 +187,9 @@ const CreatureInteract = () => {
     <Layout>
       <div className="creature-interact-page container mt-5">
         <h1 className="text-center mb-4">{creature.Name}</h1>
-        <div className="row justify-content-center align-items-start">
-          <div className="col d-flex flex-column align-items-center">
-            {draggableItems
-              .filter((item) => item.type === "food")
-              .map((item, index) => (
-                <div
-                  key={index}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, item)}
-                  className="emoji mb-3"
-                >
-                  <span style={{ fontSize: "2em" }}>{item.emoji}</span>
-                </div>
-              ))}
-            <StatusBar label="Hunger" value={(hunger / 24) * 100} color="red" />
-            <div
-              className="drop-target"
-              onDrop={handleDrop}
-              onDragOver={(e) => e.preventDefault()}
-            >
-              Drop your Fugglet some food!
-            </div>
-          </div>
 
+        {/* Row for creature visualization */}
+        <div className="row justify-content-center align-items-start mb-4">
           <div className="col-md-4 d-flex justify-content-center">
             <div
               className="creature"
@@ -155,33 +220,108 @@ const CreatureInteract = () => {
                   alt="Legs"
                 ></img>
               </div>
+              <div className="speech-bubble hunger-bubble">
+                {getHungerMessage()}
+              </div>
+              <div className="speech-bubble happiness-bubble">
+                {getHappinessMessage()}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Row for columns of food and play items */}
+        <div className="row justify-content-center align-items-start">
+          <div className="col-md-4">
+            {/* Column for food items */}
+            <div className="d-flex flex-column align-items-center">
+              <h3>Food Items</h3>
+              <div className="emoji-container">
+                {draggableItems
+                  .filter((item) => item.type === "food")
+                  .map((item, index) =>
+                    isMobile ? (
+                      <button
+                        key={index}
+                        onClick={() => handleItemUse(item)}
+                        className="emoji mb-3 btn btn-light emoji-btn"
+                      >
+                        {item.emoji}
+                      </button>
+                    ) : (
+                      <div
+                        key={index}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, item)}
+                        className="emoji mb-3"
+                        style={{ fontSize: "2em" }}
+                      >
+                        {item.emoji}
+                      </div>
+                    )
+                  )}
+                <StatusBar
+                  label="Hunger"
+                  value={(hunger / 24) * 100}
+                  color="red"
+                />
+                <div
+                  className="drop-target"
+                  onDrop={handleDrop}
+                  onDragOver={(e) => e.preventDefault()}
+                >
+                  {isMobile
+                    ? "Tap food to feed your Fugglet!"
+                    : "Drag food to your Fugglet!"}
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="col d-flex flex-column align-items-center">
-            {draggableItems
-              .filter((item) => item.type === "play")
-              .map((item, index) => (
+          <div className="col-md-4">
+            {/* Column for play items */}
+            <div className="d-flex flex-column align-items-center">
+              <h3>Play Items</h3>
+              <div className="emoji-container">
+                {draggableItems
+                  .filter((item) => item.type === "play")
+                  .map((item, index) =>
+                    isMobile ? (
+                      <button
+                        key={index}
+                        onClick={() => handleItemUse(item)}
+                        className="emoji mb-3 btn btn-light emoji-btn"
+                        style={{ fontSize: "2em" }}
+                      >
+                        {item.emoji}
+                      </button>
+                    ) : (
+                      <div
+                        key={index}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, item)}
+                        className="emoji mb-3"
+                        style={{ fontSize: "2em" }}
+                      >
+                        {item.emoji}
+                      </div>
+                    )
+                  )}
+                <StatusBar
+                  label="Happiness"
+                  value={(happiness / 50) * 100}
+                  color="green"
+                />
                 <div
-                  key={index}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, item)}
-                  className="emoji mb-3"
+                  className="drop-target"
+                  onDrop={handleDrop}
+                  onDragOver={(e) => e.preventDefault()}
                 >
-                  <span style={{ fontSize: "2em" }}>{item.emoji}</span>
+                  {isMobile
+                    ? "Tap toys to play with your Fugglet!"
+                    : "Drag toys to your Fugglet!"}
                 </div>
-              ))}
-            <StatusBar
-              label="Happiness"
-              value={(happiness / 50) * 100}
-              color="green"
-            />
-            <div
-              className="drop-target"
-              onDrop={handleDrop}
-              onDragOver={(e) => e.preventDefault()}
-            >
-              Drop your Fugglet some toys!
+              </div>
             </div>
           </div>
         </div>
