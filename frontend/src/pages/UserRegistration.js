@@ -5,6 +5,7 @@ import axios from 'axios';
 import Layout from '../components/Layout';
 import { validateUsername, validatePassword, validateEmail, validateConfirmPassword } from '../services/validation';
 import { code409Error } from '../services/errorHandler';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 
 const UserRegistration = () => {
     const [user, setUser] = useState({
@@ -16,6 +17,7 @@ const UserRegistration = () => {
     const [error, setError] = useState(null);
     const [validated, setValidated] = useState(false);
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -37,6 +39,9 @@ const UserRegistration = () => {
     };
 
 
+    const handleShowPassword = () =>{
+        setShowPassword(!showPassword);
+    }
     const handleUsernameChange = (e) => {
         setUser({ ...user, username: e.target.value });
     };
@@ -54,6 +59,7 @@ const UserRegistration = () => {
     const passwordError = validatePassword(user.password);
     const emailError = validateEmail(user.email);
     const confirmPasswordError = validateConfirmPassword(user.confirmPassword, user.password)
+
     const isValidUsername = !usernameError && user.username;
     const isValidPassword = !passwordError && user.password;
     const isValidEmail = !emailError && user.email;
@@ -94,24 +100,37 @@ const UserRegistration = () => {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formPassword">
-                    <Form.Label>Password*</Form.Label>
-                    <Form.Control
-                        type="password" value={user.password || ''} required minLength={6} maxLength={30}
-                        onChange={handlePasswordChange}
-                        pattern='(?=.*[!@#$%^&*(),.?":{}|<>0-9])(?=.*[A-Z])(?=.*[a-z]).{6,30}'
-                        isInvalid={user.password && passwordError} isValid={user.password && isValidPassword}
-                    />
-                        {passwordError && (
-                            <Form.Control.Feedback type="invalid">
-                                {passwordError}
-                            </Form.Control.Feedback>
-                        )}
+                        <Form.Label>Password*</Form.Label>
+                        <div className="row">
+                            <div className='input-group'>
+                            <span className='col-9 input-group-text'>
+                                <Form.Control
+                                    type={ showPassword ? "text" : "password" } value={user.password || ''} required minLength={6} maxLength={30}
+                                    onChange={handlePasswordChange}
+                                    pattern='(?=.*[!@#$%^&*(),.?":{}|<>0-9])(?=.*[A-Z])(?=.*[a-z]).{6,30}'
+                                    isInvalid={user.password && passwordError} isValid={user.password && isValidPassword}
+                                />
+                            </span>
+                            <span className='col-3 input-group-text'>
+                                <Button className="  btn-info" onClick={handleShowPassword}>
+                                    {showPassword ? <BsFillEyeFill /> : <BsFillEyeSlashFill />} {/* Eye icons */}
+                                </Button>
+                            </span>
+                            </div>
+                        </div>
+                            {passwordError && (
+                                <Form.Control.Feedback type="invalid">
+                                    {passwordError}
+                                </Form.Control.Feedback>
+                            )}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formConfirmPassword">
                         <Form.Label>Confirm Password</Form.Label>
+                        <div className='input-group-text'>
                         <Form.Control
-                            type="password" required value={user.confirmPassword}
+                             type={ showPassword ? "text" : "password" } required
+                             value={user.confirmPassword}
                             onChange={handleConfirmPasswordChange}
                             isInvalid={user.confirmPassword && confirmPasswordError} isValid={user.confirmPassword && isValidConfirmPassword}
                         />
@@ -120,6 +139,7 @@ const UserRegistration = () => {
                                 Passwords do not match.
                             </Form.Text>
                         )}
+                        </div>
                     </Form.Group>
 
                     <Button variant="primary" type="submit">

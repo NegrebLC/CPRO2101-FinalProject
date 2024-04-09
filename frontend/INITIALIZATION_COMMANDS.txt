@@ -5,9 +5,10 @@ Commands to run for initialization of project:
     npm i react-bootstrap
     npm i axios
     npm i socket.io-client
+    npm install react-icons
 
 SHORTHAND:
-    npx create-react-app frontend && cd frontend && npm i bootstrap bootswatch react-router-dom react-bootstrap axios socket.io-client
+    npx create-react-app frontend && cd frontend && npm i bootstrap bootswatch react-router-dom react-bootstrap axios socket.io-client react-icons
 
 *If you use any other commands add them to the above list*
 *Commit changes to these files to dev branch*
