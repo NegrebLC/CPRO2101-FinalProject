@@ -3,7 +3,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Layout from '../components/Layout';
-
+import { validateUsername, validatePassword } from '../services/validation';
 
 const UserRegistration = () => {
     const [user, setUser] = useState({
@@ -29,12 +29,25 @@ const UserRegistration = () => {
                 const response = await axios.post('http://localhost:5000/api/users/create', userData);
                 console.log('User created:', response.data);
                 navigate('/login');
-            } 
+            }
         } catch (error) {
             setError(error.message);
         }
         setValidated(true); 
     };
+
+    const handleUsernameChange = (e) => {
+        setUser({ ...user, username: e.target.value });
+    };
+    const handlePasswordChange = (e) => { 
+        setUser({ ...user, password: e.target.value });
+    };
+
+    const usernameError = validateUsername(user.username);
+    const passwordError = validatePassword(user.password);
+    const isValidUsername = !usernameError && !!user.username;
+    const isValidPassword = !passwordError && !!user.password;
+
 
     return (
         <Layout title='User Registration'>
@@ -46,13 +59,15 @@ const UserRegistration = () => {
                     <Form.Group className="mb-3" controlId="formUsername">
                         <Form.Label>Username*</Form.Label>
                         <Form.Control
-                            type="text"  value={user.username || ''}
-                            required onChange={(e) => setUser({...user, username: e.target.value})}
+                            type="text" value={user.username || ''} required minLength={6} maxLength={30}
+                            onChange={handleUsernameChange}
+                            isInvalid={user.username && usernameError} isValid={user.username && isValidUsername}
                         />
-
-                        <Form.Control.Feedback type="invalid">
-                            Please enter a username.
-                        </Form.Control.Feedback>
+                        {usernameError && (
+                            <Form.Control.Feedback type="invalid">
+                                {usernameError}
+                            </Form.Control.Feedback>
+                        )}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formEmail">
@@ -62,19 +77,23 @@ const UserRegistration = () => {
                             onChange={(e) => setUser({...user, email: e.target.value})}
                         />
                         <Form.Control.Feedback type="invalid">
-                            Please enter a valid email address.
+                            Please enter a valid email address. 
                         </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control required type="password"
-                            value={user.password || ''} minLength={6}
-                            onChange={(e) => setUser({...user, password: e.target.value})} 
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please enter a password with at least 6 characters.
-                        </Form.Control.Feedback>
+                    <Form.Label>Password*</Form.Label>
+                    <Form.Control
+                        type="password" value={user.password || ''} required minLength={6} maxLength={30}
+                        onChange={handlePasswordChange}
+                        pattern='(?=.*[!@#$%^&*(),.?":{}|<>0-9])(?=.*[A-Z])(?=.*[a-z]).{6,30}'
+                        isInvalid={user.password && passwordError} isValid={user.password && isValidPassword}
+                    />
+                        {passwordError && (
+                            <Form.Control.Feedback type="invalid">
+                                {passwordError}
+                            </Form.Control.Feedback>
+                        )}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formConfirmPassword">
