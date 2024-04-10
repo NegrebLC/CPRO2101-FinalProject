@@ -292,7 +292,9 @@ const CreatureInteract = () => {
                       <button
                         key={index}
                         onClick={() => handleItemUse(item)}
-                        className="emoji mb-3 btn btn-light emoji-btn"
+                        className="emoji mb-3 me-2 btn btn-light"
+                        style={{ fontSize: "2em", maxWidth: "3em", borderRadius: "50px" }}
+
                       >
                         {item.emoji}: ${item.cost}
                       </button>
@@ -338,8 +340,8 @@ const CreatureInteract = () => {
                       <button
                         key={index}
                         onClick={() => handleItemUse(item)}
-                        className="emoji mb-3 btn btn-light emoji-btn"
-                        style={{ fontSize: "2em" }}
+                        className="emoji mb-3 me-2 btn btn-light"
+                        style={{ fontSize: "2em", maxWidth: "3em", borderRadius: "50px" }}
                       >
                         {item.emoji}: ${item.cost}
                       </button>
@@ -375,7 +377,7 @@ const CreatureInteract = () => {
           <div className="container col-6">
             <div className="display-4 mb-2 text-center">{purchaseMessage}</div>
             <div className="display-4 mb-2 text-center">${currency}</div>
-            <div className="container col-6">
+            <div className="container col-md-6">
               <button className="btn btn-outline-warning" onClick={addCurrency}>
                 Get Money
               </button>
