@@ -1,0 +1,18 @@
+Commands to run for initialization of project:
+    npx create-react-app frontend
+    npm i bootstrap bootswatch
+    npm i react-router-dom
+    npm i react-bootstrap
+    npm i axios
+    npm i socket.io-client
+    npm install react-icons
+
+SHORTHAND:
+    npx create-react-app frontend && cd frontend && npm i bootstrap bootswatch react-router-dom react-bootstrap axios socket.io-client react-icons
+
+*If you use any other commands add them to the above list*
+*Commit changes to these files to dev branch*
+
+To test Agent login navigate to /agents/login and login with:
+username: agent
+password: agent
