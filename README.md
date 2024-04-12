@@ -1,1 +1,3 @@
-# CPRO2101-FinalProject
+# Fugglets
+### A Creature Care Application
+## CPRO2101 Final Project
